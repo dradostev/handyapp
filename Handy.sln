@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handy.Domain", "Handy.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handy.Infrastructure", "Handy.Infrastructure\Handy.Infrastructure.csproj", "{4CDC2D13-4E2C-4994-B49C-304FCEA8D603}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{660A765F-4CBA-4F91-B5E1-7E3158E5CFA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,10 @@ Global
 		{4CDC2D13-4E2C-4994-B49C-304FCEA8D603}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CDC2D13-4E2C-4994-B49C-304FCEA8D603}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CDC2D13-4E2C-4994-B49C-304FCEA8D603}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{078BE8E0-286B-4B9F-9F6B-AD174EE13647} = {660A765F-4CBA-4F91-B5E1-7E3158E5CFA4}
+		{B20552CE-F3CB-4305-BB54-7BA90336FA5D} = {660A765F-4CBA-4F91-B5E1-7E3158E5CFA4}
+		{4CDC2D13-4E2C-4994-B49C-304FCEA8D603} = {660A765F-4CBA-4F91-B5E1-7E3158E5CFA4}
 	EndGlobalSection
 EndGlobal

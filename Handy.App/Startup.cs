@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Handy.App.Middlewares;
+using Handy.Domain.AccountContext.Entities;
+using Handy.Domain.SharedContext.Services;
 using Handy.Infrastructure;
+using Handy.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +37,9 @@ namespace Handy.App
             services.AddDbContext<HandyDbContext>(options =>
                 options.UseNpgsql("Server=127.0.0.1;Port=5432;Database=pisya3;User Id=postgres;Password=123;", 
                     n => n.MigrationsAssembly("Handy.Infrastructure")));
+            
+            // repositories
+            services.AddScoped<IRepository<Account>, AccountRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +56,7 @@ namespace Handy.App
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
         }
     }
