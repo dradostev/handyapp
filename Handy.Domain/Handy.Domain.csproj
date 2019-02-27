@@ -10,4 +10,10 @@
       <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="NoteContext\Commands" />
+      <Folder Include="NoteContext\Entities" />
+      <Folder Include="NoteContext\Services" />
+    </ItemGroup>
+
 </Project>

@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Handy.App.Configuration;
 using Handy.App.Middlewares;
+using Handy.App.Services;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.SharedContext.Services;
 using Handy.Infrastructure;
 using Handy.Infrastructure.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -17,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Handy.App
 {
@@ -32,11 +37,33 @@ namespace Handy.App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
+            var jwtOptions = Configuration.GetSection("JwtOptions").Get<JwtOptions>(); // костыль
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtOptions.Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = jwtOptions.Audience,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = jwtOptions.GetSecurityKey(),
+                        ValidateIssuerSigningKey = true
+                    };
+                });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMediatR();
             services.AddDbContext<HandyDbContext>(options =>
                 options.UseNpgsql("Server=127.0.0.1;Port=5432;Database=pisya3;User Id=postgres;Password=123;", 
                     n => n.MigrationsAssembly("Handy.Infrastructure")));
+            
+            // app services
+            services.AddScoped<IAuthService, AuthService>();
             
             // repositories
             services.AddScoped<IRepository<Account>, AccountRepository>();
@@ -56,6 +83,7 @@ namespace Handy.App
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
         }
