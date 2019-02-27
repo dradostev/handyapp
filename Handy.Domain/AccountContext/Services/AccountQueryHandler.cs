@@ -23,7 +23,7 @@ namespace Handy.Domain.AccountContext.Services
         
         public async Task<UserProfile> Handle(ShowMyProfile query, CancellationToken cancellationToken)
         {
-            var account = await _accountRepository.GetByCriteria(x => x.Login == query.Login);
+            var account = await _accountRepository.GetById(query.Id);
             if (account == null) throw new NotFoundException("Profile not found");
             return _mapper.Map<UserProfile>(account);
         }

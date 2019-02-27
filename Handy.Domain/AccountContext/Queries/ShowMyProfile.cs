@@ -9,6 +9,6 @@ namespace Handy.Domain.AccountContext.Queries
     public class ShowMyProfile : IRequest<UserProfile>
     {
         [Required]
-        public string Login { get; set; }
+        public Guid Id { get; set; }
     }
 }

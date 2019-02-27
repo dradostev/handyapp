@@ -24,15 +24,15 @@ namespace Handy.Infrastructure.Repositories
             return await _db.Accounts.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<Account> GetByCriteria(Expression<Func<Account, bool>> criteria)
+        public async Task<Account> GetByCriteria(Expression<Func<Account, bool>> predicate)
         {
-            return await _db.Accounts.FirstOrDefaultAsync(criteria);
+            return await _db.Accounts.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<IEnumerable<Account>> ListByCriteria(Expression<Func<Account, bool>> criteria)
+        public async Task<IEnumerable<Account>> ListByCriteria(Expression<Func<Account, bool>> predicate)
         {
             
-            return await _db.Accounts.Where(criteria).ToListAsync();
+            return await _db.Accounts.Where(predicate).ToListAsync();
         }
 
         public async Task Persist(Account item)

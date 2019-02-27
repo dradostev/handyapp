@@ -58,8 +58,7 @@ namespace Handy.App.Services
             
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, account.Login),
-                new Claim(ClaimsIdentity.DefaultNameClaimType, account.Id.ToString()),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, account.Id.ToString())
             };
             var claimsIdentity = new ClaimsIdentity(
                 claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

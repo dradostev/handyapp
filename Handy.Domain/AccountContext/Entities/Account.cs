@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Handy.Domain.AccountContext.Services;
+using Handy.Domain.NoteContext.Entities;
 
 namespace Handy.Domain.AccountContext.Entities
 {
@@ -11,6 +13,7 @@ namespace Handy.Domain.AccountContext.Entities
         public string ScreenName { get; private set; }
         public DateTime Registered { get; private set; }
         public DateTime Modified { get; private set; }
+        public List<Note> Notes { get; private set; }
 
         private Account()
         {

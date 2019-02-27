@@ -1,7 +1,13 @@
+using System;
 using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
 using Handy.Domain.AccountContext.Commands;
 using Handy.Domain.AccountContext.Entities;
+using Handy.Domain.AccountContext.ReadModels;
 using Handy.Domain.AccountContext.Services;
+using Handy.Domain.SharedContext.Exceptions;
+using Handy.Domain.SharedContext.MappingProfiles;
 using Handy.Domain.SharedContext.Services;
 using Moq;
 using Xunit;
@@ -14,7 +20,12 @@ namespace Handy.Domain.Tests
         public async void AccountRegisters()
         {
             var mockAccountRepo = new Mock<IRepository<Account>>();
-            var accountCmdHandler = new AccountCommandHandler(mockAccountRepo.Object);
+
+            mockAccountRepo
+                .Setup(x => x.GetByCriteria(exp => exp.Login == "petooh"))
+                .ReturnsAsync((Account) null);
+            
+            var accountCmdHandler = new AccountCommandHandler(mockAccountRepo.Object, TestHelper.GetMockMapper());
 
             var cmd = new RegisterAccount
             {
@@ -25,9 +36,29 @@ namespace Handy.Domain.Tests
             var account = await accountCmdHandler.Handle(cmd, CancellationToken.None);
             
             Assert.Equal(cmd.Login, account.Login);
-            Assert.Equal("a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", account.Password);
             Assert.Equal(account.Login, account.ScreenName);
             Assert.NotNull(account.Registered);
         }
+
+        [Fact]
+        public async void AccountDoesntRegisterIfLoginExists()
+        {
+            var mockAccountRepo = new Mock<IRepository<Account>>();
+            
+            mockAccountRepo
+                .Setup(x => x.GetByCriteria(exp => exp.Login == "kokoko"))
+                .ReturnsAsync(new Account("kokoko", "123"));
+
+            var accountCmdHandler = new AccountCommandHandler(mockAccountRepo.Object, TestHelper.GetMockMapper());
+
+            var cmd = new RegisterAccount
+            {
+                Login = "kokoko",
+                Password = "123"
+            };
+            
+            Assert.ThrowsAsync<ConflictException>(() => accountCmdHandler.Handle(cmd, CancellationToken.None));
+        }
+
     }
 }

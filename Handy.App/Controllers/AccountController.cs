@@ -14,7 +14,7 @@ namespace Handy.App.Controllers
 {
     [Route("api/account")]
     [ValidationFilter]
-    public class AccountController : Controller
+    public class AccountController : AbstractController
     {
         private readonly IMediator _bus;
         private readonly IAuthService _authService;
@@ -43,7 +43,7 @@ namespace Handy.App.Controllers
         [Authorize]
         public async Task<IActionResult> ShowProfile()
         {
-            var account = await _bus.Send(new ShowMyProfile {Login = User.Identity.Name});
+            var account = await _bus.Send(new ShowMyProfile {Id = GetCurrentUserId()});
             return Json(account);
         }
     }

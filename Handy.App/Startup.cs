@@ -8,6 +8,7 @@ using Handy.App.Configuration;
 using Handy.App.Middlewares;
 using Handy.App.Services;
 using Handy.Domain.AccountContext.Entities;
+using Handy.Domain.NoteContext.Entities;
 using Handy.Domain.SharedContext.MappingProfiles;
 using Handy.Domain.SharedContext.Services;
 using Handy.Infrastructure;
@@ -74,6 +75,7 @@ namespace Handy.App
             
             // repositories
             services.AddScoped<IRepository<Account>, AccountRepository>();
+            services.AddScoped<IRepository<Note>, NoteRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,7 +93,7 @@ namespace Handy.App
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
-            //app.UseMiddleware<ExceptionHandlerMiddleware>();
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
         }
     }
