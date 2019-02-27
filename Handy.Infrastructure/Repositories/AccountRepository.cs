@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.SharedContext.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Handy.Infrastructure.Repositories
 {
@@ -16,19 +19,20 @@ namespace Handy.Infrastructure.Repositories
             _db = db;
         }
         
-        public Account GetById(Guid id)
+        public async Task<Account> GetById(Guid id)
         {
-            return _db.Accounts.FirstOrDefault(x => x.Id == id);
+            return await _db.Accounts.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Account GetByCriteria(Func<Account, bool> criteria)
+        public async Task<Account> GetByCriteria(Expression<Func<Account, bool>> criteria)
         {
-            return _db.Accounts.FirstOrDefault(criteria);
+            return await _db.Accounts.FirstOrDefaultAsync(criteria);
         }
 
-        public IEnumerable<Account> ListByCriteria(Func<Account, bool> criteria)
+        public async Task<IEnumerable<Account>> ListByCriteria(Expression<Func<Account, bool>> criteria)
         {
-            return _db.Accounts.Where(criteria);
+            
+            return await _db.Accounts.Where(criteria).ToListAsync();
         }
 
         public async Task Persist(Account item)
@@ -40,6 +44,13 @@ namespace Handy.Infrastructure.Repositories
         public async Task Update(Account item)
         {
             _db.Accounts.Update(item);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task Delete(Guid id)
+        {
+            var account = await GetById(id);
+            _db.Accounts.Remove(account);
             await _db.SaveChangesAsync();
         }
     }

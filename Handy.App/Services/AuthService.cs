@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Handy.App.Configuration;
 using Handy.Domain.AccountContext.Commands;
 using Handy.Domain.AccountContext.Entities;
@@ -28,9 +29,9 @@ namespace Handy.App.Services
             _options = options.Value;
         }
 
-        public string GetToken(LogIn command)
+        public async Task<string> GetToken(LogIn command)
         {
-            var identity = GetIdentity(command.Login, command.Password);
+            var identity = await GetIdentity(command.Login, command.Password);
             if (identity == null) throw new AccessDeniedException("Incorrect credentials");
             
             var now = DateTime.UtcNow;
@@ -39,7 +40,7 @@ namespace Handy.App.Services
                 audience: _options.Audience,
                 notBefore: now,
                 claims: identity.Claims,
-                expires: now.Add(TimeSpan.FromMinutes(20)),
+                expires: now.Add(TimeSpan.FromMinutes(_options.ExpirationMinutes)),
                 signingCredentials: new SigningCredentials(
                     _options.GetSecurityKey(),
                     SecurityAlgorithms.HmacSha256
@@ -48,16 +49,17 @@ namespace Handy.App.Services
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
-        private ClaimsIdentity GetIdentity(string login, string password)
+        private async Task<ClaimsIdentity> GetIdentity(string login, string password)
         {
-            var account = _accountRepository.GetByCriteria(x =>
+            var account = await _accountRepository.GetByCriteria(x =>
                 x.Login == login && x.Password == PasswordHelper.HashPassword(password));
 
             if (account == null) return null;
             
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, account.Login)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, account.Login),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, account.Id.ToString()),
             };
             var claimsIdentity = new ClaimsIdentity(
                 claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

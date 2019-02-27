@@ -34,6 +34,9 @@ namespace Handy.Infrastructure
             modelBuilder.Entity<Account>()
                 .Property(p => p.Modified)
                 .HasColumnName("modified");
+            modelBuilder.Entity<Account>()
+                .HasIndex(p => p.Login)
+                .IsUnique();
         }
     }
 }

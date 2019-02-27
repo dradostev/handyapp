@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Handy.App.Configuration;
 using Handy.App.Middlewares;
 using Handy.App.Services;
 using Handy.Domain.AccountContext.Entities;
+using Handy.Domain.SharedContext.MappingProfiles;
 using Handy.Domain.SharedContext.Services;
 using Handy.Infrastructure;
 using Handy.Infrastructure.Repositories;
@@ -15,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -59,8 +62,12 @@ namespace Handy.App
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMediatR();
             services.AddDbContext<HandyDbContext>(options =>
-                options.UseNpgsql("Server=127.0.0.1;Port=5432;Database=pisya3;User Id=postgres;Password=123;", 
+                options.UseNpgsql(Configuration.GetConnectionString("Main"), 
                     n => n.MigrationsAssembly("Handy.Infrastructure")));
+
+            services.AddSingleton(
+                new MapperConfiguration(config => config.AddProfile(new MappingProfile())).CreateMapper()
+            );
             
             // app services
             services.AddScoped<IAuthService, AuthService>();
@@ -84,7 +91,7 @@ namespace Handy.App
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
+            //app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
         }
     }
