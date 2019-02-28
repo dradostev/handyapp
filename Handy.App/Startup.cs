@@ -96,7 +96,7 @@ namespace Handy.App
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
+            //app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
         }
     }

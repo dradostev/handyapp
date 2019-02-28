@@ -9,7 +9,7 @@ namespace Handy.Domain.TodoContext.Commands
     {
         [Required]
         public Guid TodoId { get; set; }
-        [Required]
+        [Required, MinLength(3)]
         public string NewTitle { get; set; }
     }
 }

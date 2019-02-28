@@ -20,17 +20,17 @@ namespace Handy.Infrastructure.Repositories
         
         public async Task<TodoList> GetById(Guid id)
         {
-            return await _db.TodoLists.FirstOrDefaultAsync(x => x.Id == id);
+            return await _db.TodoLists.Include(x => x.Todos).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<TodoList> GetByCriteria(Expression<Func<TodoList, bool>> predicate)
         {
-            return await _db.TodoLists.FirstOrDefaultAsync(predicate);
+            return await _db.TodoLists.Include(x => x.Todos).FirstOrDefaultAsync(predicate);
         }
 
         public async Task<IEnumerable<TodoList>> ListByCriteria(Expression<Func<TodoList, bool>> predicate)
         {
-            return await _db.TodoLists.Where(predicate).ToListAsync();
+            return await _db.TodoLists.Where(predicate).Include(x => x.Todos).ToListAsync();
         }
 
         public async Task Persist(TodoList item)

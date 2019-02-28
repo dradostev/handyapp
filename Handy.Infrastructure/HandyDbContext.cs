@@ -127,7 +127,8 @@ namespace Handy.Infrastructure
             modelBuilder.Entity<Todo>()
                 .HasOne(p => p.TodoList)
                 .WithMany(p => p.Todos)
-                .HasForeignKey(p => p.TodoListId);
+                .HasForeignKey(p => p.TodoListId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
