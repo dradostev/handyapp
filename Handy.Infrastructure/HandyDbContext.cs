@@ -110,6 +110,9 @@ namespace Handy.Infrastructure
                 .Property(p => p.Id)
                 .HasColumnName("id");
             modelBuilder.Entity<Todo>()
+                .Property(p => p.TodoListId)
+                .HasColumnName("todo_list_id");
+            modelBuilder.Entity<Todo>()
                 .Property(p => p.Title)
                 .HasColumnName("title");
             modelBuilder.Entity<Todo>()

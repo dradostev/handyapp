@@ -3,15 +3,17 @@ using System;
 using Handy.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Handy.Infrastructure.Migrations
 {
     [DbContext(typeof(HandyDbContext))]
-    partial class HandyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190228094747_TodoAndTodoListTables")]
+    partial class TodoAndTodoListTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,8 +96,7 @@ namespace Handy.Infrastructure.Migrations
                     b.Property<string>("Title")
                         .HasColumnName("title");
 
-                    b.Property<Guid>("TodoListId")
-                        .HasColumnName("todo_list_id");
+                    b.Property<Guid>("TodoListId");
 
                     b.HasKey("Id");
 
