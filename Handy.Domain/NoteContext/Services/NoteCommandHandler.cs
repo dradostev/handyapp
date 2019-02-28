@@ -47,7 +47,7 @@ namespace Handy.Domain.NoteContext.Services
             var note = await _noteRepository.GetByCriteria(x => x.Id == command.NoteId && x.AccountId == command.AccountId);
             if (note == null) throw new NotFoundException("Note not found");
 
-            await _noteRepository.Delete(note.Id);
+            await _noteRepository.Delete(note);
             return true;
         }
     }

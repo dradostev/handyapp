@@ -12,6 +12,6 @@ namespace Handy.Domain.SharedContext.Services
         Task<IEnumerable<T>> ListByCriteria(Expression<Func<T, bool>> predicate);
         Task Persist(T item);
         Task Update(T item);
-        Task Delete(Guid id);
+        Task Delete(T item);
     }
 }

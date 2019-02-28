@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Handy.Domain.AccountContext.Services;
 using Handy.Domain.NoteContext.Entities;
+using Handy.Domain.TodoContext.Entities;
 
 namespace Handy.Domain.AccountContext.Entities
 {
@@ -14,6 +15,7 @@ namespace Handy.Domain.AccountContext.Entities
         public DateTime Registered { get; private set; }
         public DateTime Modified { get; private set; }
         public List<Note> Notes { get; private set; }
+        public List<TodoList> TodoLists { get; private set; }
 
         private Account()
         {

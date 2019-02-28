@@ -45,10 +45,9 @@ namespace Handy.Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(Note item)
         {
-            var note = await GetById(id);
-            _db.Notes.Remove(note);
+            _db.Notes.Remove(item);
             await _db.SaveChangesAsync();
         }
     }

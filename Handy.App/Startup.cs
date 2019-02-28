@@ -11,6 +11,7 @@ using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.NoteContext.Entities;
 using Handy.Domain.SharedContext.MappingProfiles;
 using Handy.Domain.SharedContext.Services;
+using Handy.Domain.TodoContext.Entities;
 using Handy.Infrastructure;
 using Handy.Infrastructure.Repositories;
 using MediatR;
@@ -76,6 +77,8 @@ namespace Handy.App
             // repositories
             services.AddScoped<IRepository<Account>, AccountRepository>();
             services.AddScoped<IRepository<Note>, NoteRepository>();
+            services.AddScoped<IRepository<TodoList>, TodoListRepository>();
+            services.AddScoped<IRepository<Todo>, TodoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
