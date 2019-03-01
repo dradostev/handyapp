@@ -11,6 +11,7 @@ namespace Handy.Infrastructure
         public DbSet<Note> Notes { get; set; }
         public DbSet<TodoList> TodoLists { get; set; }
         public DbSet<Todo> Todos { get; set; }
+        public DbSet<Reminder> Reminders { get; set; }
         
         public HandyDbContext(DbContextOptions<HandyDbContext> options) : base(options)
         {
@@ -23,6 +24,7 @@ namespace Handy.Infrastructure
             SetupNotesTable(modelBuilder);
             SetupTodoListsTable(modelBuilder);
             SetupTodosTable(modelBuilder);
+            SetupRemindersTable(modelBuilder);
         }
 
         private static void SetupAccountsTable(ModelBuilder modelBuilder)
@@ -129,6 +131,34 @@ namespace Handy.Infrastructure
                 .WithMany(p => p.Todos)
                 .HasForeignKey(p => p.TodoListId)
                 .OnDelete(DeleteBehavior.Cascade);
+        }
+
+        private static void SetupRemindersTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Reminder>()
+                .ToTable("reminders");
+            modelBuilder.Entity<Reminder>()
+                .Property(p => p.Id)
+                .HasColumnName("id");
+            modelBuilder.Entity<Reminder>()
+                .Property(p => p.Content)
+                .HasColumnName("content");
+            modelBuilder.Entity<Reminder>()
+                .Property(p => p.FireOn)
+                .HasColumnName("fire_on");
+            modelBuilder.Entity<Reminder>()
+                .Property(p => p.Enabled)
+                .HasColumnName("enabled");
+            modelBuilder.Entity<Reminder>()
+                .Property(p => p.Created)
+                .HasColumnName("created");
+            modelBuilder.Entity<Reminder>()
+                .Property(p => p.Modified)
+                .HasColumnName("modified");
+            modelBuilder.Entity<Reminder>()
+                .HasOne(p => p.Account)
+                .WithMany(p => p.Reminders)
+                .HasForeignKey(p => p.AccountId);
         }
     }
 }

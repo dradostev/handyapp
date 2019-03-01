@@ -79,6 +79,7 @@ namespace Handy.App
             services.AddScoped<IRepository<Note>, NoteRepository>();
             services.AddScoped<IRepository<TodoList>, TodoListRepository>();
             services.AddScoped<IRepository<Todo>, TodoRepository>();
+            services.AddScoped<IRepository<Reminder>, ReminderRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,7 +97,7 @@ namespace Handy.App
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
-            //app.UseMiddleware<ExceptionHandlerMiddleware>();
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
         }
     }

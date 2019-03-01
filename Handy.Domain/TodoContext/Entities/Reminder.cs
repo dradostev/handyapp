@@ -1,4 +1,5 @@
 using System;
+using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.SharedContext.Exceptions;
 
 namespace Handy.Domain.TodoContext.Entities
@@ -6,31 +7,44 @@ namespace Handy.Domain.TodoContext.Entities
     public class Reminder
     {
         public Guid Id { get; private set; }
-        public Guid TodoId { get; private set; }
-        public Todo Todo { get; private set; }
+        public Guid AccountId { get; private set; }
+        public Account Account { get; private set; }
+        public string Content { get; private set; }
         public DateTime FireOn { get; private set; }
         public bool Enabled { get; private set; }
-
-        public Reminder(Guid todoId, DateTime fireOn)
+        public DateTime Created { get; private set; }
+        public DateTime Modified { get; private set; }
+        
+        public Reminder(Guid accountId, string content, DateTime fireOn)
         {
             Id = Guid.NewGuid();
-            TodoId = todoId;
+            AccountId = accountId;
+            Content = content;
             FireOn = fireOn;
             Enabled = false;
+            Created = DateTime.Now;
         }
 
         public void Fire()
         {
             if (FireOn >= DateTime.Now)
+            {
                 Enabled = false;
+                Modified = DateTime.Now;
+            }
         }
 
         public void ChangeFireTime(DateTime newTime)
         {
             if (newTime > DateTime.Now)
+            {
                 FireOn = newTime;
+                Modified = DateTime.Now;
+            }
             else
+            {
                 throw new DomainLogicException("Given time is already left");
+            }
         }
     }
 }
