@@ -50,6 +50,10 @@ namespace Handy.App.Middlewares
                     code = 409;
                     message = e.Message ?? "Resource conflict";
                     break;
+                case DomainLogicException e:
+                    code = 400;
+                    message = e.Message ?? "Business logic error";
+                    break;
             }
 
             context.Response.ContentType = "application/json";
