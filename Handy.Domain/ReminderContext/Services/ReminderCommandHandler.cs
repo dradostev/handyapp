@@ -13,7 +13,8 @@ namespace Handy.Domain.ReminderContext.Services
     public class ReminderCommandHandler : IRequestHandler<AddReminder, ReminderRead>,
                                           IRequestHandler<ChangeReminder, ReminderRead>,
                                           IRequestHandler<ChangeReminderTime, ReminderRead>,
-                                          IRequestHandler<SwitchReminder, ReminderRead>
+                                          IRequestHandler<SwitchReminder, ReminderRead>,
+                                          IRequestHandler<DeleteReminder, bool>
     {
         private readonly IRepository<Reminder> _reminderRepository;
         private readonly IMapper _mapper;
@@ -62,6 +63,15 @@ namespace Handy.Domain.ReminderContext.Services
 
             await _reminderRepository.Update(reminder);
             return _mapper.Map<ReminderRead>(reminder);
+        }
+
+        public async Task<bool> Handle(DeleteReminder command, CancellationToken cancellationToken)
+        {
+            var reminder = await _reminderRepository.GetById(command.ReminderId);
+            if (reminder == null) throw new NotFoundException("Reminder not found");
+
+            await _reminderRepository.Delete(reminder);
+            return true;
         }
     }
 }

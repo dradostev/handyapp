@@ -65,5 +65,12 @@ namespace Handy.App.Controllers
             var reminder = await _bus.Send(new SwitchReminder{ReminderId = id});
             return Json(reminder);
         }
+        
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteReminder(Guid id)
+        {
+            await _bus.Send(new DeleteReminder{ReminderId = id});
+            return Json(new {message = "Reminder successfully deleted"});
+        }
     }
 }
