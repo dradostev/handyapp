@@ -21,7 +21,7 @@ namespace Handy.Domain.ReminderContext.Entities
             AccountId = accountId;
             Content = content;
             FireOn = fireOn;
-            Enabled = false;
+            Enabled = true;
             Created = DateTime.Now;
         }
 
