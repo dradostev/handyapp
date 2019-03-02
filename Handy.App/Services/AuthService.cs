@@ -40,7 +40,7 @@ namespace Handy.App.Services
                 audience: _options.Audience,
                 notBefore: now,
                 claims: identity.Claims,
-                expires: now.Add(TimeSpan.FromMinutes(_options.ExpirationMinutes)),
+                expires: now.Add(TimeSpan.FromHours(_options.ExpirationHours)),
                 signingCredentials: new SigningCredentials(
                     _options.GetSecurityKey(),
                     SecurityAlgorithms.HmacSha256
