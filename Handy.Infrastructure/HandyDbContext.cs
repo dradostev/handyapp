@@ -45,6 +45,9 @@ namespace Handy.Infrastructure
                 .Property(p => p.ScreenName)
                 .HasColumnName("screen_name");
             modelBuilder.Entity<Account>()
+                .Property(p => p.BotChatId)
+                .HasColumnName("telegram_chat_id");
+            modelBuilder.Entity<Account>()
                 .Property(p => p.Registered)
                 .HasColumnName("registered");
             modelBuilder.Entity<Account>()

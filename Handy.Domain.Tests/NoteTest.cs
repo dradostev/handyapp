@@ -8,6 +8,7 @@ using Handy.Domain.NoteContext.Commands;
 using Handy.Domain.NoteContext.Entities;
 using Handy.Domain.NoteContext.Services;
 using Handy.Domain.SharedContext.Services;
+using MediatR;
 using Moq;
 using Xunit;
 
@@ -19,7 +20,8 @@ namespace Handy.Domain.Tests
         public async void NoteAdds()
         {
             var mockNoteRepo = new Mock<IRepository<Note>>();
-            var noteCmdHandler = new NoteCommandHandler(mockNoteRepo.Object, TestHelper.GetMockMapper());
+            var mockBus = new Mock<IMediator>();
+            var noteCmdHandler = new NoteCommandHandler(mockNoteRepo.Object, TestHelper.GetMockMapper(), mockBus.Object);
 
             var cmd = new AddNote
             {
@@ -44,8 +46,9 @@ namespace Handy.Domain.Tests
             mockNoteRepo
                 .Setup(x => x.GetByCriteria(It.IsAny<Expression<Func<Note, bool>>>()))
                 .ReturnsAsync(mockNote);
+            var mockBus = new Mock<IMediator>();
             
-            var noteCmdHandler = new NoteCommandHandler(mockNoteRepo.Object, TestHelper.GetMockMapper());
+            var noteCmdHandler = new NoteCommandHandler(mockNoteRepo.Object, TestHelper.GetMockMapper(), mockBus.Object);
             var cmd = new ModifyNote
             {
                 Title = "Qooqareqoo",

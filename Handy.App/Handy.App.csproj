@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Handy.Bot\Handy.Bot.csproj" />
       <ProjectReference Include="..\Handy.Domain\Handy.Domain.csproj" />
       <ProjectReference Include="..\Handy.Infrastructure\Handy.Infrastructure.csproj" />
     </ItemGroup>

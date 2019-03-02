@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Handy.Domain.NoteContext.Commands;
 using Handy.Domain.NoteContext.Entities;
+using Handy.Domain.NoteContext.Events;
 using Handy.Domain.NoteContext.ReadModels;
 using Handy.Domain.SharedContext.Exceptions;
 using Handy.Domain.SharedContext.Services;
@@ -16,17 +17,20 @@ namespace Handy.Domain.NoteContext.Services
     {
         private readonly IRepository<Note> _noteRepository;
         private readonly IMapper _mapper;
+        private readonly IMediator _bus;
 
-        public NoteCommandHandler(IRepository<Note> noteRepository, IMapper mapper)
+        public NoteCommandHandler(IRepository<Note> noteRepository, IMapper mapper, IMediator bus)
         {
             _noteRepository = noteRepository;
             _mapper = mapper;
+            _bus = bus;
         }
         
         public async Task<NoteRead> Handle(AddNote command, CancellationToken cancellationToken)
         {
             var note = new Note(command.AccountId, command.Title, command.Content);
             await _noteRepository.Persist(note);
+            await _bus.Publish(new NoteAdded {NoteId = note.Id}, cancellationToken);
             return _mapper.Map<NoteRead>(note);
         }
 

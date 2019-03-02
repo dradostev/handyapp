@@ -13,6 +13,7 @@ namespace Handy.Domain.AccountContext.Entities
         public string Login { get; private set; }
         public string Password { get; private set; }
         public string ScreenName { get; private set; }
+        public long BotChatId { get; private set; }
         public DateTime Registered { get; private set; }
         public DateTime Modified { get; private set; }
         
@@ -27,6 +28,12 @@ namespace Handy.Domain.AccountContext.Entities
             Password = PasswordHelper.HashPassword(password);
             ScreenName = string.IsNullOrEmpty(screenName) ? login : screenName;
             Registered = DateTime.Now;
+        }
+
+        public void StartBotDialog(long chatId)
+        {
+            BotChatId = chatId;
+            Modified = DateTime.Now;
         }
     }
 }

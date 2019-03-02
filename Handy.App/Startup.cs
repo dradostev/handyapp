@@ -7,6 +7,7 @@ using AutoMapper;
 using Handy.App.Configuration;
 using Handy.App.Middlewares;
 using Handy.App.Services;
+using Handy.Bot.Core;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.NoteContext.Entities;
 using Handy.Domain.ReminderContext.Entities;
@@ -81,6 +82,9 @@ namespace Handy.App
             services.AddScoped<IRepository<TodoList>, TodoListRepository>();
             services.AddScoped<IRepository<Todo>, TodoRepository>();
             services.AddScoped<IRepository<Reminder>, ReminderRepository>();
+            
+            // telegram bot
+            services.AddSingleton<HandyBot>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,6 +104,8 @@ namespace Handy.App
             app.UseAuthentication();
             app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
+
+            app.ApplicationServices.GetService<HandyBot>().Client.StartReceiving();
         }
     }
 }

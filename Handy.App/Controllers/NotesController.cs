@@ -1,11 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using App.Filters;
+using Handy.Bot.Core;
 using Handy.Domain.NoteContext.Commands;
 using Handy.Domain.NoteContext.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Telegram.Bot.Types;
 
 namespace Handy.App.Controllers
 {
