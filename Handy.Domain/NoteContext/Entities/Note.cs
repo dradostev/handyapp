@@ -10,6 +10,7 @@ namespace Handy.Domain.NoteContext.Entities
         public Account Account { get; private set; }
         public string Title { get; private set; }
         public string Content { get; private set; }
+        public int MessageId { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime Modified { get; private set; }
 
@@ -32,6 +33,11 @@ namespace Handy.Domain.NoteContext.Entities
         {
             Content = newContent;
             Modified = DateTime.Now;
+        }
+
+        public void SetMessageId(int messageId)
+        {
+            MessageId = messageId;
         }
     }
 }

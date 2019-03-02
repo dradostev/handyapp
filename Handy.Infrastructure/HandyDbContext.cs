@@ -75,6 +75,9 @@ namespace Handy.Infrastructure
                 .Property(p => p.Content)
                 .HasColumnName("content");
             modelBuilder.Entity<Note>()
+                .Property(p => p.MessageId)
+                .HasColumnName("telegram_message_id");
+            modelBuilder.Entity<Note>()
                 .Property(p => p.Created)
                 .HasColumnName("created");
             modelBuilder.Entity<Note>()

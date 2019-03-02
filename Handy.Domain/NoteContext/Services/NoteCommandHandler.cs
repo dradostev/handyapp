@@ -42,6 +42,7 @@ namespace Handy.Domain.NoteContext.Services
             if (!string.IsNullOrEmpty(command.Title)) note.ChangeTitle(command.Title);
             if (!string.IsNullOrEmpty(command.Content)) note.ChangeContent(command.Content);
 
+            await _bus.Publish(new NoteModified {NoteId = note.Id}, cancellationToken);
             await _noteRepository.Update(note);
             return _mapper.Map<NoteRead>(note);
         }
@@ -51,6 +52,7 @@ namespace Handy.Domain.NoteContext.Services
             var note = await _noteRepository.GetByCriteria(x => x.Id == command.NoteId && x.AccountId == command.AccountId);
             if (note == null) throw new NotFoundException("Note not found");
 
+            await _bus.Publish(new NoteDeleted {AccountId = note.AccountId, MessageId = note.MessageId}, cancellationToken);
             await _noteRepository.Delete(note);
             return true;
         }
