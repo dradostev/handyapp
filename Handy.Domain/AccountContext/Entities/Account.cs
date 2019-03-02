@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Handy.Domain.AccountContext.Services;
 using Handy.Domain.NoteContext.Entities;
+using Handy.Domain.ReminderContext.Entities;
 using Handy.Domain.TodoContext.Entities;
 
 namespace Handy.Domain.AccountContext.Entities

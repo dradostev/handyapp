@@ -1,5 +1,6 @@
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.NoteContext.Entities;
+using Handy.Domain.ReminderContext.Entities;
 using Handy.Domain.TodoContext.Entities;
 using Microsoft.EntityFrameworkCore;
 

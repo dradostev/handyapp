@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using App.Filters;
 using Handy.Domain.TodoContext.Commands;
 using Handy.Domain.TodoContext.Queries;
 using MediatR;
@@ -10,6 +11,7 @@ namespace Handy.App.Controllers
 {
     [Route("api/todos")]
     [Authorize]
+    [ValidationFilter]
     public class TodoController : AbstractController
     {
         private readonly IMediator _bus;

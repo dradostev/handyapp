@@ -2,7 +2,7 @@ using System;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.SharedContext.Exceptions;
 
-namespace Handy.Domain.TodoContext.Entities
+namespace Handy.Domain.ReminderContext.Entities
 {
     public class Reminder
     {
@@ -34,6 +34,11 @@ namespace Handy.Domain.TodoContext.Entities
             }
         }
 
+        public void ChangeContent(string newContent)
+        {
+            Content = newContent;
+        }
+
         public void ChangeFireTime(DateTime newTime)
         {
             if (newTime > DateTime.Now)
@@ -45,6 +50,11 @@ namespace Handy.Domain.TodoContext.Entities
             {
                 throw new DomainLogicException("Given time is already left");
             }
+        }
+
+        public void SwitchEnabled()
+        {
+            Enabled = !Enabled;
         }
     }
 }

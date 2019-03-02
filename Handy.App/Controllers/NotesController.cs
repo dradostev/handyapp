@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using App.Filters;
 using Handy.Domain.NoteContext.Commands;
 using Handy.Domain.NoteContext.Queries;
 using MediatR;
@@ -10,6 +11,7 @@ namespace Handy.App.Controllers
 {
     [Route("api/notes")]
     [Authorize]
+    [ValidationFilter]
     public class NotesController : AbstractController
     {
         private readonly IMediator _bus;

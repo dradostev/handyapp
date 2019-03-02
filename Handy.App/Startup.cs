@@ -9,6 +9,7 @@ using Handy.App.Middlewares;
 using Handy.App.Services;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.NoteContext.Entities;
+using Handy.Domain.ReminderContext.Entities;
 using Handy.Domain.SharedContext.MappingProfiles;
 using Handy.Domain.SharedContext.Services;
 using Handy.Domain.TodoContext.Entities;
