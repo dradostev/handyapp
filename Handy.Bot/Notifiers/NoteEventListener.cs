@@ -31,7 +31,7 @@ namespace Handy.Bot.Notifiers
             var note = await _noteRepository.GetById(evt.NoteId);
             var account = await _accountRepository.GetById(note.AccountId);
 
-            var message = await _bot.Client.SendTextMessageAsync(
+            var message = await _bot.Api.SendTextMessageAsync(
                 chatId: new ChatId(account.BotChatId), 
                 parseMode: ParseMode.Markdown,
                 text:$"*{note.Title}*\n\n{note.Content}",
@@ -47,7 +47,7 @@ namespace Handy.Bot.Notifiers
             var note = await _noteRepository.GetById(evt.NoteId);
             var account = await _accountRepository.GetById(note.AccountId);
 
-            await _bot.Client.EditMessageTextAsync(
+            await _bot.Api.EditMessageTextAsync(
                 chatId: new ChatId(account.BotChatId),
                 messageId: note.MessageId,
                 parseMode: ParseMode.Markdown,
@@ -61,7 +61,7 @@ namespace Handy.Bot.Notifiers
         {
             var account = await _accountRepository.GetById(evt.AccountId);
 
-            await _bot.Client.DeleteMessageAsync(
+            await _bot.Api.DeleteMessageAsync(
                 chatId: new ChatId(account.BotChatId),
                 messageId: evt.MessageId,
                 cancellationToken: cancellationToken

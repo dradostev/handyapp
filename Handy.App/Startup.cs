@@ -85,6 +85,7 @@ namespace Handy.App
             
             // telegram bot
             services.AddSingleton<HandyBot>();
+            services.AddScoped<IUpdateHandler, UpdateHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,12 +101,12 @@ namespace Handy.App
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
 
-            app.ApplicationServices.GetService<HandyBot>().Client.StartReceiving();
+            app.ApplicationServices.GetService<HandyBot>().Api.SetWebhookAsync("https://2345998e.ngrok.io/api/webhook").Wait();
         }
     }
 }
