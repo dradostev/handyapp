@@ -1,0 +1,45 @@
+version: '3.4'
+
+networks: 
+  webapp:
+    driver: bridge
+
+services:
+
+  postgres_srv:
+    image: postgres:latest
+    ports:
+      - "5432"
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user1
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: handy_db
+    networks: 
+      - webapp
+
+  handyapp:
+    image: handyapp
+    depends_on:
+      - "postgres_srv"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8443:8443"
+    environment:
+      DB_CONNECTION_STRING: "host=postgres_srv;port=5432;database=handy_db;username=user1;password=123"
+    networks:
+      - webapp
+    
+  # frontend:
+  #   image: nginx:latest
+  #   ports:
+  #     - "9000:80"
+  #   volumes:
+  #     - ./frontend:/usr/share/nginx/html
+
+volumes:
+  db_volume:
