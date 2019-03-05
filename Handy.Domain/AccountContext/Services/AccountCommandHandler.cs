@@ -26,7 +26,7 @@ namespace Handy.Domain.AccountContext.Services
         {
             if (await _accountRepository.GetByCriteria(x => x.Login == command.Login) != null)
                 throw new ConflictException("User with this login is already registered");
-            var account = new Account(command.Login, command.Password, command.ScreenName);
+            var account = new Account(command.Login, command.Password, command.Tz, command.ChatId, command.ScreenName);
             await _accountRepository.Persist(account);
             return _mapper.Map<UserProfile>(account);
         }

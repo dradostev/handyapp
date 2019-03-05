@@ -24,8 +24,6 @@ namespace Handy.App.Controllers
         {
             if (update == null) return Ok();
             await _updateHandler.Handle(update);
-            _logger.LogInformation(update.Message.Text);
-            
             return Ok();
         }
     }

@@ -13,7 +13,7 @@ namespace Handy.Infrastructure
         
         public HandyDbContext(DbContextOptions<HandyDbContext> options) : base(options)
         {
-
+            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace Handy.Infrastructure
             modelBuilder.Entity<Account>()
                 .Property(p => p.Password)
                 .HasColumnName("password_hash");
+            modelBuilder.Entity<Account>()
+                .Property(p => p.TimeZone)
+                .HasColumnName("tz");
             modelBuilder.Entity<Account>()
                 .Property(p => p.ScreenName)
                 .HasColumnName("screen_name");

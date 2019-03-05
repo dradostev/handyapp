@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Handy.Domain.ReminderContext.Commands;
@@ -38,7 +39,9 @@ namespace Handy.Bot.HostedServices
                 var reminderRepository = scope.ServiceProvider.GetRequiredService<IRepository<Reminder>>();
                 var bus = scope.ServiceProvider.GetRequiredService<IMediator>();
                 
-                var reminders = await reminderRepository.ListByCriteria(x => x.Enabled && x.FireOn <= DateTime.Now);
+                var reminders = await reminderRepository.ListByCriteria(
+                    x => x.Enabled && x.FireOn <= DateTime.Now.AddHours(x.Account.TimeZone));
+
                 foreach (var reminder in reminders)
                 {
                     try
@@ -47,7 +50,7 @@ namespace Handy.Bot.HostedServices
                     }
                     catch (NotFoundException e)
                     {
-                        _logger.LogError("Reminder not found");
+                        _logger.LogError(e.Message ?? "Reminder not found");
                     }
                 }
             }

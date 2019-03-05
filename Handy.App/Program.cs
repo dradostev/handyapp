@@ -18,7 +18,11 @@ namespace Handy.App
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            WebHost
+                .CreateDefaultBuilder(args)
+                .ConfigureLogging((context, logging) => { logging.AddConsole(); })
                 .UseStartup<Startup>();
+
+        //.UseUrls("http://localhost:8443");
     }
 }

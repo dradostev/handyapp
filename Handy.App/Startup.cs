@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Text;
+using AutoMapper;
 using Handy.App.Configuration;
 using Handy.App.Middlewares;
 using Handy.App.Services;
@@ -18,6 +20,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -47,18 +50,18 @@ namespace Handy.App
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = jwtOptions.Issuer,
+                        ValidIssuer = "localhost",
                         ValidateAudience = true,
-                        ValidAudience = jwtOptions.Audience,
+                        ValidAudience = "localhost",
                         ValidateLifetime = true,
-                        IssuerSigningKey = jwtOptions.GetSecurityKey(),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("UbeJoux01ULXUIfQkv")),
                         ValidateIssuerSigningKey = true
                     };
                 });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMediatR();
             services.AddDbContext<HandyDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("Main"), 
+                options.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING"), 
                     n => n.MigrationsAssembly("Handy.Infrastructure")));
 
             services.AddSingleton(
@@ -98,7 +101,12 @@ namespace Handy.App
             app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
 
-            app.ApplicationServices.GetService<HandyBot>().Api.SetWebhookAsync("https://38363578.ngrok.io/api/webhook").Wait();
+            app
+                .ApplicationServices
+                .GetService<HandyBot>()
+                .Api
+                .SetWebhookAsync(Environment.GetEnvironmentVariable("TELEGRAM_WEBHOOK_URL"))
+                .Wait();
         }
     }
 }

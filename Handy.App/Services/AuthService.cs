@@ -36,13 +36,14 @@ namespace Handy.App.Services
             
             var now = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
-                issuer: _options.Issuer,
-                audience: _options.Audience,
+                issuer: "localhost",
+                audience: "localhost",
                 notBefore: now,
                 claims: identity.Claims,
-                expires: now.Add(TimeSpan.FromHours(_options.ExpirationHours)),
+                expires: now.Add(TimeSpan.FromHours(24)),
                 signingCredentials: new SigningCredentials(
-                    _options.GetSecurityKey(),
+                    //_options.GetSecurityKey(),
+                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes("UbeJoux01ULXUIfQkv")),
                     SecurityAlgorithms.HmacSha256
                 )
             );

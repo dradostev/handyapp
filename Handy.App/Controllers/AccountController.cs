@@ -25,6 +25,12 @@ namespace Handy.App.Controllers
             _authService = authService;
         }
 
+        [HttpGet("test")]
+        public IActionResult Test()
+        {
+            return Json(new {message = "Application works!"});
+        }
+
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterAccount command)
         {

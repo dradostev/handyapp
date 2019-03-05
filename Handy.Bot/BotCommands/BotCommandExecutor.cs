@@ -37,6 +37,13 @@ namespace Handy.Bot.BotCommands
                 case var exp when exp.Contains(ReminderCmdTpl):
                     await AddReminder(update);
                     break;
+                default:
+                    await _bus.Publish(new BotErrorOccurred
+                    {
+                        ChatId = update.Message.Chat.Id,
+                        Error = "Unknown command"
+                    });
+                    break;
             }
         }
 
@@ -88,7 +95,7 @@ namespace Handy.Bot.BotCommands
             {
                 AccountId = account.Id,
                 Content = content,
-                FireOn = fireOn
+                FireOn = fireOn.ToUniversalTime()
             });
         }
     }

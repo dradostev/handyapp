@@ -28,9 +28,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8443:8443"
+      - "8443:80"
+      - "7777:5432"
     environment:
       DB_CONNECTION_STRING: "host=postgres_srv;port=5432;database=handy_db;username=user1;password=123"
+      TELEGRAM_API_TOKEN: "773495748:AAHiN_08Q8EUtDCBTxiSOtPAt-u7D1uKsIw"
+      TELEGRAM_WEBHOOK_URL: "https://c986eee2.ngrok.io/api/webhook"
     networks:
       - webapp
     

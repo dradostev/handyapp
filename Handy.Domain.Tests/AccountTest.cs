@@ -47,7 +47,7 @@ namespace Handy.Domain.Tests
             
             mockAccountRepo
                 .Setup(x => x.GetByCriteria(exp => exp.Login == "kokoko"))
-                .ReturnsAsync(new Account("kokoko", "123"));
+                .ReturnsAsync(new Account("kokoko", "123", 3, 12345));
 
             var accountCmdHandler = new AccountCommandHandler(mockAccountRepo.Object, TestHelper.GetMockMapper());
 

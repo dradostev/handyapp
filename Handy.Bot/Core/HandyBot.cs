@@ -8,6 +8,6 @@ namespace Handy.Bot.Core
 {
     public class HandyBot
     {
-        public TelegramBotClient Api = new TelegramBotClient("773495748:AAHiN_08Q8EUtDCBTxiSOtPAt-u7D1uKsIw");
+        public TelegramBotClient Api = new TelegramBotClient(Environment.GetEnvironmentVariable("TELEGRAM_API_TOKEN"));
     }
 }

@@ -20,17 +20,17 @@ namespace Handy.Infrastructure.Repositories
         
         public async Task<Reminder> GetById(Guid id)
         {
-            return await _db.Reminders.FirstOrDefaultAsync(x => x.Id == id);
+            return await _db.Reminders.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Reminder> GetByCriteria(Expression<Func<Reminder, bool>> predicate)
         {
-            return await _db.Reminders.FirstOrDefaultAsync(predicate);
+            return await _db.Reminders.Include(x => x.Account).FirstOrDefaultAsync(predicate);
         }
 
         public async Task<IEnumerable<Reminder>> ListByCriteria(Expression<Func<Reminder, bool>> predicate)
         {
-            return await _db.Reminders.Where(predicate).ToListAsync();
+            return await _db.Reminders.Include(x => x.Account).Where(predicate).ToListAsync();
         }
 
         public async Task Persist(Reminder item)
