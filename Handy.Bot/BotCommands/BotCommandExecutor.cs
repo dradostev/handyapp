@@ -1,9 +1,10 @@
+using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Handy.Bot.Messages;
+using Handy.Bot.Notifiers;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.NoteContext.Commands;
-using Handy.Domain.NoteContext.ReadModels;
+using Handy.Domain.ReminderContext.Commands;
 using Handy.Domain.SharedContext.Services;
 using MediatR;
 using Telegram.Bot.Types;
@@ -16,7 +17,9 @@ namespace Handy.Bot.BotCommands
         private readonly IRepository<Account> _accountRepository;
         
         public const string NoteCmdTpl = @"/note";
-        public const string TodoCmdTpl = @"/todo";
+        public const string ReminderCmdTpl = @"/remind";
+
+        private const string BracketsTpl = @"\[(.*?)\]";
 
         public BotCommandExecutor(IMediator bus, IRepository<Account> accountRepository)
         {
@@ -24,28 +27,27 @@ namespace Handy.Bot.BotCommands
             _accountRepository = accountRepository;
         }
 
-        public async Task Execute(Update update)
+        public async Task MatchCommand(Update update)
         {
             switch (update.Message.Text)
             {
                 case var exp when exp.Contains(NoteCmdTpl):
                     await AddNote(update);
                     break;
-                case var exp when exp.Contains(TodoCmdTpl):
+                case var exp when exp.Contains(ReminderCmdTpl):
+                    await AddReminder(update);
                     break;
             }
         }
 
         private async Task AddNote(Update update)
-        {
-            var noteTitleTpl = @"t\[\w+\]";
-            
+        {   
             var body = Regex.Replace(update.Message.Text, NoteCmdTpl, string.Empty);
-            var title = Regex.Match(body, noteTitleTpl)
+            var title = Regex.Match(body, BracketsTpl)
                 .Value?
-                .Replace("t[", string.Empty)
+                .Replace("[", string.Empty)
                 .Replace("]", string.Empty);
-            var content = Regex.Replace(body, noteTitleTpl, string.Empty).Trim();
+            var content = Regex.Replace(body, BracketsTpl, string.Empty).Trim();
 
             var account = await _accountRepository.GetByCriteria(x => x.BotChatId == update.Message.Chat.Id);
             
@@ -56,6 +58,37 @@ namespace Handy.Bot.BotCommands
                 Title = title,
                 Content = content,
                 AccountId = account.Id
+            });
+        }
+
+        private async Task AddReminder(Update update)
+        {
+            var body = Regex.Replace(update.Message.Text, ReminderCmdTpl, string.Empty);
+            var timeStr = Regex.Match(body, BracketsTpl)
+                .Value?
+                .Replace("[", string.Empty)
+                .Replace("]", string.Empty);
+            var content = Regex.Replace(body, BracketsTpl, string.Empty).Trim();
+            
+            var account = await _accountRepository.GetByCriteria(x => x.BotChatId == update.Message.Chat.Id);
+            
+            if (account == null) return;
+
+            if (!DateTime.TryParse(timeStr, out var fireOn))
+            {
+                await _bus.Publish(new BotErrorOccurred
+                {
+                    ChatId = update.Message.Chat.Id,
+                    Error = "Invalid date format"
+                });
+                return;
+            }
+
+            await _bus.Send(new AddReminder
+            {
+                AccountId = account.Id,
+                Content = content,
+                FireOn = fireOn
             });
         }
     }

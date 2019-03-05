@@ -4,6 +4,7 @@ using Handy.Domain.ReminderContext.Commands;
 using Handy.Domain.ReminderContext.Entities;
 using Handy.Domain.ReminderContext.Services;
 using Handy.Domain.SharedContext.Services;
+using MediatR;
 using Moq;
 using Xunit;
 
@@ -15,7 +16,8 @@ namespace Handy.Domain.Tests
         public async void ReminderCreated()
         {
             var mockReminderRepo = new Mock<IRepository<Reminder>>();
-            var reminderCmdHandler = new ReminderCommandHandler(mockReminderRepo.Object, TestHelper.GetMockMapper());
+            var mockBus = new Mock<IMediator>();
+            var reminderCmdHandler = new ReminderCommandHandler(mockReminderRepo.Object, TestHelper.GetMockMapper(), mockBus.Object);
 
             var cmd = new AddReminder
             {
@@ -36,9 +38,10 @@ namespace Handy.Domain.Tests
         public async void ReminderRenamed()
         {
             var mockReminderRepo = new Mock<IRepository<Reminder>>();
+            var mockBus = new Mock<IMediator>();
             var reminder = new Reminder(Guid.NewGuid(), "kokoko", new DateTime(2019, 4, 3, 9, 15, 0));
             mockReminderRepo.Setup(x => x.GetById(reminder.Id)).ReturnsAsync(reminder);
-            var reminderCmdHandler = new ReminderCommandHandler(mockReminderRepo.Object, TestHelper.GetMockMapper());
+            var reminderCmdHandler = new ReminderCommandHandler(mockReminderRepo.Object, TestHelper.GetMockMapper(), mockBus.Object);
 
             var cmd = new ChangeReminder
             {
@@ -56,9 +59,10 @@ namespace Handy.Domain.Tests
         public async void ReminderTimeChanged()
         {
             var mockReminderRepo = new Mock<IRepository<Reminder>>();
+            var mockBus = new Mock<IMediator>();
             var reminder = new Reminder(Guid.NewGuid(), "kokoko", new DateTime(2019, 4, 3, 9, 15, 0));
             mockReminderRepo.Setup(x => x.GetById(reminder.Id)).ReturnsAsync(reminder);
-            var reminderCmdHandler = new ReminderCommandHandler(mockReminderRepo.Object, TestHelper.GetMockMapper());
+            var reminderCmdHandler = new ReminderCommandHandler(mockReminderRepo.Object, TestHelper.GetMockMapper(), mockBus.Object);
             
             var cmd = new ChangeReminderTime
             {
@@ -76,9 +80,10 @@ namespace Handy.Domain.Tests
         public async void ReminderSwitched()
         {
             var mockReminderRepo = new Mock<IRepository<Reminder>>();
+            var mockBus = new Mock<IMediator>();
             var reminder = new Reminder(Guid.NewGuid(), "kokoko", new DateTime(2019, 4, 3, 9, 15, 0));
             mockReminderRepo.Setup(x => x.GetById(reminder.Id)).ReturnsAsync(reminder);
-            var reminderCmdHandler = new ReminderCommandHandler(mockReminderRepo.Object, TestHelper.GetMockMapper());
+            var reminderCmdHandler = new ReminderCommandHandler(mockReminderRepo.Object, TestHelper.GetMockMapper(), mockBus.Object);
             
             var cmd = new SwitchReminder
             {

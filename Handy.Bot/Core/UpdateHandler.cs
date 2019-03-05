@@ -16,7 +16,7 @@ namespace Handy.Bot.Core
         
         public async Task Handle(Update update)
         {
-            await _botCommandExecutor.Execute(update);
+            await _botCommandExecutor.MatchCommand(update);
         }
     }
 }
