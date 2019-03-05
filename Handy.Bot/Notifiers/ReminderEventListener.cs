@@ -11,7 +11,8 @@ using Telegram.Bot.Types.Enums;
 
 namespace Handy.Bot.Notifiers
 {
-    public class ReminderEventListener : INotificationHandler<ReminderAdded>
+    public class ReminderEventListener : INotificationHandler<ReminderAdded>,
+                                         INotificationHandler<ReminderFired>
     {
         private readonly IRepository<Reminder> _reminderRepository;
         private readonly IRepository<Account> _accountRepository;
@@ -38,6 +39,19 @@ namespace Handy.Bot.Notifiers
             
             reminder.ConnectMessage(message.MessageId);
             await _reminderRepository.Update(reminder);
+        }
+
+        public async Task Handle(ReminderFired evt, CancellationToken cancellationToken)
+        {
+            var reminder = await _reminderRepository.GetById(evt.ReminderId);
+            var account = await _accountRepository.GetById(evt.AccountId);
+            
+            var message = await _bot.Api.SendTextMessageAsync(
+                chatId: new ChatId(account.BotChatId), 
+                parseMode: ParseMode.Markdown,
+                text:$"⚠️{reminder.Content} on *{reminder.FireOn:f}*",
+                cancellationToken: cancellationToken
+            );
         }
     }
 }

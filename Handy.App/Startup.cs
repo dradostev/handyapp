@@ -4,6 +4,7 @@ using Handy.App.Middlewares;
 using Handy.App.Services;
 using Handy.Bot.BotCommands;
 using Handy.Bot.Core;
+using Handy.Bot.HostedServices;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.NoteContext.Entities;
 using Handy.Domain.ReminderContext.Entities;
@@ -76,6 +77,7 @@ namespace Handy.App
             services.AddSingleton<HandyBot>();
             services.AddScoped<BotCommandExecutor>();
             services.AddScoped<IUpdateHandler, UpdateHandler>();
+            services.AddHostedService<ReminderWorker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -15,6 +15,7 @@ namespace Handy.Domain.ReminderContext.Services
                                           IRequestHandler<ChangeReminder, ReminderRead>,
                                           IRequestHandler<ChangeReminderTime, ReminderRead>,
                                           IRequestHandler<SwitchReminder, ReminderRead>,
+                                          IRequestHandler<FireReminder, ReminderRead>,
                                           IRequestHandler<DeleteReminder, bool>
     {
         private readonly IRepository<Reminder> _reminderRepository;
@@ -76,6 +77,17 @@ namespace Handy.Domain.ReminderContext.Services
 
             await _reminderRepository.Delete(reminder);
             return true;
+        }
+
+        public async Task<ReminderRead> Handle(FireReminder command, CancellationToken cancellationToken)
+        {
+            var reminder = await _reminderRepository.GetById(command.ReminderId);
+            if (reminder == null) throw new NotFoundException("Reminder not found");
+            
+            reminder.SwitchEnabled();
+            await _reminderRepository.Update(reminder);
+            await _bus.Publish(new ReminderFired {AccountId = reminder.AccountId, ReminderId = reminder.Id}, cancellationToken);
+            return _mapper.Map<ReminderRead>(reminder);
         }
     }
 }
