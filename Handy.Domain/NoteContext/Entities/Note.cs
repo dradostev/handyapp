@@ -35,7 +35,7 @@ namespace Handy.Domain.NoteContext.Entities
             Modified = DateTime.Now;
         }
 
-        public void SetMessageId(int messageId)
+        public void ConnectMessage(int messageId)
         {
             MessageId = messageId;
         }

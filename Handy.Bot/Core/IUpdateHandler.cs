@@ -1,9 +1,10 @@
+using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
 namespace Handy.Bot.Core
 {
     public interface IUpdateHandler
     {
-        void Handle(Update update);
+        Task Handle(Update update);
     }
 }

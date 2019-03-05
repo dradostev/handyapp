@@ -88,7 +88,8 @@ namespace Handy.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id");
 
-                    b.Property<Guid>("AccountId");
+                    b.Property<Guid>("AccountId")
+                        .HasColumnName("account_id");
 
                     b.Property<string>("Content")
                         .HasColumnName("content");
@@ -102,6 +103,9 @@ namespace Handy.Infrastructure.Migrations
                     b.Property<DateTime>("FireOn")
                         .HasColumnName("fire_on");
 
+                    b.Property<int>("MessageId")
+                        .HasColumnName("telegram_message_id");
+
                     b.Property<DateTime>("Modified")
                         .HasColumnName("modified");
 
@@ -110,56 +114,6 @@ namespace Handy.Infrastructure.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("reminders");
-                });
-
-            modelBuilder.Entity("Handy.Domain.TodoContext.Entities.Todo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnName("created");
-
-                    b.Property<bool>("Done")
-                        .HasColumnName("done");
-
-                    b.Property<DateTime>("Modified")
-                        .HasColumnName("modified");
-
-                    b.Property<string>("Title")
-                        .HasColumnName("title");
-
-                    b.Property<Guid>("TodoListId")
-                        .HasColumnName("todo_list_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TodoListId");
-
-                    b.ToTable("todo_items");
-                });
-
-            modelBuilder.Entity("Handy.Domain.TodoContext.Entities.TodoList", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnName("account_id");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnName("created");
-
-                    b.Property<DateTime>("Modified")
-                        .HasColumnName("modified");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("todo_lists");
                 });
 
             modelBuilder.Entity("Handy.Domain.NoteContext.Entities.Note", b =>
@@ -174,22 +128,6 @@ namespace Handy.Infrastructure.Migrations
                 {
                     b.HasOne("Handy.Domain.AccountContext.Entities.Account", "Account")
                         .WithMany("Reminders")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Handy.Domain.TodoContext.Entities.Todo", b =>
-                {
-                    b.HasOne("Handy.Domain.TodoContext.Entities.TodoList", "TodoList")
-                        .WithMany("Todos")
-                        .HasForeignKey("TodoListId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Handy.Domain.TodoContext.Entities.TodoList", b =>
-                {
-                    b.HasOne("Handy.Domain.AccountContext.Entities.Account", "Account")
-                        .WithMany("TodoLists")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

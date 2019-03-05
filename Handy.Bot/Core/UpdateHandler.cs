@@ -1,30 +1,22 @@
-using Handy.Domain.AccountContext.Entities;
-using Handy.Domain.NoteContext.Commands;
-using Handy.Domain.SharedContext.Services;
-using MediatR;
+using System.Linq;
+using System.Threading.Tasks;
+using Handy.Bot.BotCommands;
 using Telegram.Bot.Types;
 
 namespace Handy.Bot.Core
 {
     public class UpdateHandler : IUpdateHandler
     {
-        private readonly IMediator _bus;
-        private readonly IRepository<Account> _accRepo;
+        private readonly BotCommandExecutor _botCommandExecutor;
 
-        public UpdateHandler(IMediator bus, IRepository<Account> accRepo)
+        public UpdateHandler(BotCommandExecutor botCommandExecutor)
         {
-            _bus = bus;
-            _accRepo = accRepo;
+            _botCommandExecutor = botCommandExecutor;
         }
         
-        public void Handle(Update update)
+        public async Task Handle(Update update)
         {
-            if (update.Message != null && update.Message.Text.Contains("/note"))
-            {
-                var text = update.Message.Text.Replace("/note", "");
-                var account = _accRepo.GetByCriteria(x => x.BotChatId == update.Message.Chat.Id).Result;
-                _bus.Send(new AddNote {Content = text, AccountId = account.Id}).Wait();
-            }
+            await _botCommandExecutor.Execute(update);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Handy.Bot.Notifiers
                 cancellationToken: cancellationToken
             );
             
-            note.SetMessageId(message.MessageId);
+            note.ConnectMessage(message.MessageId);
             await _noteRepository.Update(note);
         }
 

@@ -23,7 +23,7 @@ namespace Handy.App.Controllers
         public async Task<IActionResult> Post([FromBody] Update update)
         {
             if (update == null) return Ok();
-            _updateHandler.Handle(update);
+            await _updateHandler.Handle(update);
             _logger.LogInformation(update.Message.Text);
             
             return Ok();

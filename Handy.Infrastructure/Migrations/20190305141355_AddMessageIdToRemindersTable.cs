@@ -2,13 +2,13 @@
 
 namespace Handy.Infrastructure.Migrations
 {
-    public partial class AddMessageIdToNote : Migration
+    public partial class AddMessageIdToRemindersTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
                 name: "telegram_message_id",
-                table: "notes",
+                table: "reminders",
                 nullable: false,
                 defaultValue: 0);
         }
@@ -17,7 +17,7 @@ namespace Handy.Infrastructure.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "telegram_message_id",
-                table: "notes");
+                table: "reminders");
         }
     }
 }

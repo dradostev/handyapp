@@ -1,33 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Handy.App.Configuration;
 using Handy.App.Middlewares;
 using Handy.App.Services;
+using Handy.Bot.BotCommands;
 using Handy.Bot.Core;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.NoteContext.Entities;
 using Handy.Domain.ReminderContext.Entities;
 using Handy.Domain.SharedContext.MappingProfiles;
 using Handy.Domain.SharedContext.Services;
-using Handy.Domain.TodoContext.Entities;
 using Handy.Infrastructure;
 using Handy.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Handy.App
@@ -79,12 +70,11 @@ namespace Handy.App
             // repositories
             services.AddScoped<IRepository<Account>, AccountRepository>();
             services.AddScoped<IRepository<Note>, NoteRepository>();
-            services.AddScoped<IRepository<TodoList>, TodoListRepository>();
-            services.AddScoped<IRepository<Todo>, TodoRepository>();
             services.AddScoped<IRepository<Reminder>, ReminderRepository>();
             
             // telegram bot
             services.AddSingleton<HandyBot>();
+            services.AddScoped<BotCommandExecutor>();
             services.AddScoped<IUpdateHandler, UpdateHandler>();
         }
 
@@ -106,7 +96,7 @@ namespace Handy.App
             app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
 
-            app.ApplicationServices.GetService<HandyBot>().Api.SetWebhookAsync("https://2345998e.ngrok.io/api/webhook").Wait();
+            app.ApplicationServices.GetService<HandyBot>().Api.SetWebhookAsync("https://38363578.ngrok.io/api/webhook").Wait();
         }
     }
 }

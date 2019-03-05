@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Handy.Domain.AccountContext.Services;
 using Handy.Domain.NoteContext.Entities;
 using Handy.Domain.ReminderContext.Entities;
-using Handy.Domain.TodoContext.Entities;
 
 namespace Handy.Domain.AccountContext.Entities
 {
@@ -18,7 +17,6 @@ namespace Handy.Domain.AccountContext.Entities
         public DateTime Modified { get; private set; }
         
         public List<Note> Notes { get; private set; }
-        public List<TodoList> TodoLists { get; private set; }
         public List<Reminder> Reminders { get; private set; }
         
         public Account(string login, string password, string screenName = "")
