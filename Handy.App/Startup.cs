@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using AutoMapper;
-using Handy.App.Configuration;
 using Handy.App.Middlewares;
 using Handy.App.Services;
 using Handy.Bot.BotCommands;
@@ -20,7 +19,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -40,8 +38,6 @@ namespace Handy.App
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
-            var jwtOptions = Configuration.GetSection("JwtOptions").Get<JwtOptions>(); // костыль
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -50,11 +46,11 @@ namespace Handy.App
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = "localhost",
+                        ValidIssuer = Environment.GetEnvironmentVariable("APP_URL"),
                         ValidateAudience = true,
-                        ValidAudience = "localhost",
+                        ValidAudience = Environment.GetEnvironmentVariable("APP_URL"),
                         ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("UbeJoux01ULXUIfQkv")),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SECURITY_KEY"))),
                         ValidateIssuerSigningKey = true
                     };
                 });

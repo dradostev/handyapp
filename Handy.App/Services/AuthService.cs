@@ -2,18 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Handy.App.Configuration;
 using Handy.Domain.AccountContext.Commands;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.AccountContext.Services;
 using Handy.Domain.SharedContext.Exceptions;
 using Handy.Domain.SharedContext.Services;
-using Handy.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Handy.App.Services
@@ -21,12 +16,10 @@ namespace Handy.App.Services
     public class AuthService : IAuthService
     {
         private readonly IRepository<Account> _accountRepository;
-        private readonly JwtOptions _options;
 
-        public AuthService(IRepository<Account> accountRepository, IOptions<JwtOptions> options)
+        public AuthService(IRepository<Account> accountRepository)
         {
             _accountRepository = accountRepository;
-            _options = options.Value;
         }
 
         public async Task<string> GetToken(LogIn command)
@@ -36,14 +29,13 @@ namespace Handy.App.Services
             
             var now = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
-                issuer: "localhost",
-                audience: "localhost",
+                issuer: Environment.GetEnvironmentVariable("APP_URL"),
+                audience: Environment.GetEnvironmentVariable("APP_URL"),
                 notBefore: now,
                 claims: identity.Claims,
-                expires: now.Add(TimeSpan.FromHours(24)),
+                expires: now.Add(TimeSpan.FromHours(int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRATION_TIME")))),
                 signingCredentials: new SigningCredentials(
-                    //_options.GetSecurityKey(),
-                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes("UbeJoux01ULXUIfQkv")),
+                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SECURITY_KEY"))),
                     SecurityAlgorithms.HmacSha256
                 )
             );

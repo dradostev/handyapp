@@ -8,20 +8,24 @@ services:
 
   postgres_srv:
     image: postgres:latest
+    env_file:
+      - .env
     ports:
       - "5432"
     restart: always
     volumes:
       - db_volume:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: user1
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: handy_db
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
     networks: 
       - webapp
 
   handyapp:
     image: handyapp
+    env_file:
+      - .env
     depends_on:
       - "postgres_srv"
     build:
@@ -31,9 +35,12 @@ services:
       - "8443:80"
       - "7777:5432"
     environment:
-      DB_CONNECTION_STRING: "host=postgres_srv;port=5432;database=handy_db;username=user1;password=123"
-      TELEGRAM_API_TOKEN: "773495748:AAHiN_08Q8EUtDCBTxiSOtPAt-u7D1uKsIw"
-      TELEGRAM_WEBHOOK_URL: "https://c986eee2.ngrok.io/api/webhook"
+      DB_CONNECTION_STRING: "host=postgres_srv;port=5432;database=${DB_NAME};username=${DB_USER};password=${DB_PASSWORD}"
+      TELEGRAM_API_TOKEN: "${TELEGRAM_API_TOKEN}"
+      APP_URL: "${APP_URL}"
+      TELEGRAM_WEBHOOK_URL: "${TELEGRAM_WEBHOOK_URL}"
+      JWT_SECURITY_KEY: "${JWT_SECURITY_KEY}"
+      JWT_EXPIRATION_TIME: "${JWT_EXPIRATION_TIME}"
     networks:
       - webapp
     
