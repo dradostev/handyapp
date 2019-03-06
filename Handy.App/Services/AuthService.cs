@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Handy.App.Configuration;
 using Handy.Domain.AccountContext.Commands;
 using Handy.Domain.AccountContext.Entities;
 using Handy.Domain.AccountContext.Services;
@@ -29,13 +30,13 @@ namespace Handy.App.Services
             
             var now = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
-                issuer: Environment.GetEnvironmentVariable("APP_URL"),
-                audience: Environment.GetEnvironmentVariable("APP_URL"),
+                issuer: AppConfig.AppUrl,
+                audience: AppConfig.AppUrl,
                 notBefore: now,
                 claims: identity.Claims,
-                expires: now.Add(TimeSpan.FromHours(int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRATION_TIME")))),
+                expires: now.Add(TimeSpan.FromHours(AppConfig.JwtExpirationTime)),
                 signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SECURITY_KEY"))),
+                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppConfig.JwtSecurityKey)),
                     SecurityAlgorithms.HmacSha256
                 )
             );

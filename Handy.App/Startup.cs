@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using AutoMapper;
+using Handy.App.Configuration;
 using Handy.App.Middlewares;
 using Handy.App.Services;
 using Handy.Bot.BotCommands;
@@ -46,18 +47,18 @@ namespace Handy.App
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = Environment.GetEnvironmentVariable("APP_URL"),
+                        ValidIssuer = AppConfig.AppUrl,
                         ValidateAudience = true,
-                        ValidAudience = Environment.GetEnvironmentVariable("APP_URL"),
+                        ValidAudience = AppConfig.AppUrl,
                         ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SECURITY_KEY"))),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppConfig.JwtSecurityKey)),
                         ValidateIssuerSigningKey = true
                     };
                 });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMediatR();
             services.AddDbContext<HandyDbContext>(options =>
-                options.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING"), 
+                options.UseNpgsql(AppConfig.DbConnectionString, 
                     n => n.MigrationsAssembly("Handy.Infrastructure")));
 
             services.AddSingleton(
@@ -101,7 +102,7 @@ namespace Handy.App
                 .ApplicationServices
                 .GetService<HandyBot>()
                 .Api
-                .SetWebhookAsync(Environment.GetEnvironmentVariable("TELEGRAM_WEBHOOK_URL"))
+                .SetWebhookAsync(AppConfig.TelegramWebhookUrl)
                 .Wait();
         }
     }
