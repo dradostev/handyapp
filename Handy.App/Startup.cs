@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Telegram.Bot;
 
 namespace Handy.App
 {
@@ -98,12 +99,9 @@ namespace Handy.App
             app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
 
-            app
-                .ApplicationServices
-                .GetService<HandyBot>()
-                .Api
-                .SetWebhookAsync(AppConfig.TelegramWebhookUrl)
-                .Wait();
+            var bot = app.ApplicationServices.GetService<HandyBot>();
+            bot.Api = new TelegramBotClient(AppConfig.TelegramApiToken);
+            bot.Api.SetWebhookAsync(AppConfig.TelegramWebhookUrl).Wait();
         }
     }
 }
