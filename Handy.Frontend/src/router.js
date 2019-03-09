@@ -6,6 +6,7 @@ import LoginLayout from '@/views/layouts/LoginLayout';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
 import NotesList from '@/views/notes/NotesList';
+import NoteDetails from '@/views/notes/NoteDetails';
 import RemindersList from '@/views/RemindersList';
 
 Vue.use(Router)
@@ -41,7 +42,13 @@ const router = new Router({
         {
           path: '/notes',
           name: 'notes-list',
-          component: NotesList
+          component: NotesList,
+        },
+        {
+          path: '/notes/:id',
+          name: 'note-details',
+          component: NoteDetails,
+          props: true
         },
         {
           path: '/reminders',
