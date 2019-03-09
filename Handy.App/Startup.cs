@@ -65,6 +65,14 @@ namespace Handy.App
             services.AddSingleton(
                 new MapperConfiguration(config => config.AddProfile(new MappingProfile())).CreateMapper()
             );
+
+            services.AddCors(options => options.AddPolicy("AllowAllPolicy", builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            }));
             
             // app services
             services.AddScoped<IAuthService, AuthService>();
@@ -95,6 +103,7 @@ namespace Handy.App
             }
 
             //app.UseHttpsRedirection();
+            app.UseCors("AllowAllPolicy");
             app.UseAuthentication();
             app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();

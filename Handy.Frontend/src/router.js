@@ -1,21 +1,37 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import store from './store';
 import DefaultLayout from '@/views/layouts/DefaultLayout';
 import LoginLayout from '@/views/layouts/LoginLayout';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
-import NotesList from '@/views/NotesList';
+import NotesList from '@/views/notes/NotesList';
 import RemindersList from '@/views/RemindersList';
 
 Vue.use(Router)
 
-export default new Router({
+const authenticated = (to, from, next) => {
+  if (store.getters['account/isAuthenticated']) {
+    next();
+    return;
+  }
+  next({name: 'login'});
+};
+const notAuthenticated = (to, from, next) => {
+  if (!store.getters['account/isAuthenticated']) {
+    next();
+    return;
+  }
+  next({name: 'home'});
+};
+
+const router = new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
       component: DefaultLayout,
+      beforeEnter: authenticated,
       children: [
         {
           path: '/',
@@ -37,6 +53,7 @@ export default new Router({
     {
       path: '/login',
       component: LoginLayout,
+      beforeEnter: notAuthenticated,
       children: [
         {
           path: '/login',
@@ -46,4 +63,6 @@ export default new Router({
       ]
     }
   ]
-})
+});
+
+export default router;
