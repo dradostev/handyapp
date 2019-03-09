@@ -1,14 +1,6 @@
 <template>
   <div id="app">
-    <b-container>
-      <b-row>
-        <SidebarNav />
-        <b-col md="11">
-          <router-view/>
-        </b-col>
-      </b-row>
-    </b-container>
-    
+    <router-view />
   </div>
 </template>
 
@@ -23,5 +15,7 @@
 </script>
 
 <style lang="scss">
-
+body {
+  background-image: url('./assets/irongrip.png');
+}
 </style>
