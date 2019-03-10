@@ -28,9 +28,9 @@ namespace Handy.Infrastructure.Repositories
             return await _db.Notes.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<IEnumerable<Note>> ListByCriteria(Expression<Func<Note, bool>> predicate)
+        public async Task<IEnumerable<Note>> ListByCriteria(Expression<Func<Note, bool>> predicate, int limit = 10, int offset = 0)
         {
-            return await _db.Notes.Where(predicate).ToListAsync();
+            return await _db.Notes.Where(predicate).Skip(offset).Take(limit).ToListAsync();
         }
 
         public async Task Persist(Note item)

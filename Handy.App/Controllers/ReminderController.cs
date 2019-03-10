@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using App.Filters;
 using Handy.Domain.ReminderContext.Commands;
 using Handy.Domain.ReminderContext.Queries;
+using Handy.Domain.SharedContext.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +25,15 @@ namespace Handy.App.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ShowRemindersList()
+        public async Task<IActionResult> ShowRemindersList([FromQuery] PaginationQuery query)
         {
-            var reminders = await _bus.Send(new ListReminders {AccountId = GetCurrentUserId()});
+            var reminders = await _bus.Send(new ListReminders
+            {
+                AccountId = GetCurrentUserId(),
+                Limit = query.Limit,
+                Offset = query.Offset,
+                Filter = query.Filter//.Any() ? query.Filter : new List<string>(new []{"active"}),
+            });
             return Json(reminders);
         }
         

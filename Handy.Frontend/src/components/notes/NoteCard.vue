@@ -1,5 +1,5 @@
 <template>
-    <b-card img-top>
+    <b-card img-top md="4">
         <h4 slot="header">{{ note.title || 'Note' }}</h4>
         <b-card-text>
         {{ note.content }}

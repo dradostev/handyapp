@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Handy.Domain.SharedContext.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Handy.App.Middlewares
@@ -10,10 +11,12 @@ namespace Handy.App.Middlewares
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -28,7 +31,7 @@ namespace Handy.App.Middlewares
             }
         }
 
-        private static async Task HandleException(HttpContext context, Exception exception)
+        private async Task HandleException(HttpContext context, Exception exception)
         {
             int code = 500;
             string message = "Internal server error";
@@ -53,6 +56,9 @@ namespace Handy.App.Middlewares
                 case DomainLogicException e:
                     code = 400;
                     message = e.Message ?? "Business logic error";
+                    break;
+                case Exception e:
+                    _logger.LogError(e, e.Message);
                     break;
             }
 

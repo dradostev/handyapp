@@ -105,6 +105,7 @@ namespace Handy.App
             //app.UseHttpsRedirection();
             app.UseCors("AllowAllPolicy");
             app.UseAuthentication();
+            app.UseMiddleware<FormatQueryStringMiddleware>();
             app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseMvc();
 

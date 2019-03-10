@@ -7,33 +7,37 @@
         </b-card>
         <section class="homepage-section">
             <h2 class="display-4">Latest Notes</h2>
-            <b-card-group deck>
+            <b-card-group deck v-if="note.notes.length > 0">
                 <NoteCard v-for="note in note.notes" :key="note.id" :note="note" />
             </b-card-group>
+            <EmptyList text="No notes created yet" v-else />
         </section>
         <section class="homepage-section">
             <h2 class="display-4">Latest Reminders</h2>
-            <b-card-group deck>
-                <ReminderCard v-for="rem in reminder.reminders" key="rem.id" :reminder="rem" />
+            <b-card-group deck v-if="reminder.reminders.length > 0">
+                <ReminderCard v-for="rem in reminder.reminders" :key="rem.id" :reminder="rem" />
             </b-card-group>
+            <EmptyList text="No active reminders for now" v-else />
         </section>
     </div>
 </template>
 
 <script>
+import EmptyList from '@/components/EmptyList';
 import NoteCard from '@/components/notes/NoteCard';
 import ReminderCard from '@/components/reminders/ReminderCard';
 import { mapState, mapActions } from 'vuex';
 
 export default {
     components: {
+        EmptyList,
         NoteCard,
         ReminderCard
     },
     computed: mapState(['note', 'reminder']),
     created() {
-        this.fetchNotes();
-        this.fetchReminders();
+        this.fetchNotes({limit: 3, offset: 0});
+        this.fetchReminders({limit: 3, offset: 0, filter: ['active']});
     },
     methods: {
         ...mapActions('note', ['fetchNotes']),
@@ -41,7 +45,6 @@ export default {
     } 
 }
 </script>
-
 
 <style lang="scss" scoped>
 .homepage-section {

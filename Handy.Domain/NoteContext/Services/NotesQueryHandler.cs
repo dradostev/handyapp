@@ -23,17 +23,17 @@ namespace Handy.Domain.NoteContext.Services
             _mapper = mapper;
         }
         
-        public async Task<NoteRead> Handle(ShowNote command, CancellationToken cancellationToken)
+        public async Task<NoteRead> Handle(ShowNote query, CancellationToken cancellationToken)
         {
-            var note = await _noteRepository.GetByCriteria(x => x.Id == command.NoteId && x.AccountId == command.AccountId);
+            var note = await _noteRepository.GetByCriteria(x => x.Id == query.NoteId && x.AccountId == query.AccountId);
             if (note == null) throw new NotFoundException("Note not found");
             return _mapper.Map<NoteRead>(note);
         }
 
-        public async Task<IEnumerable<NoteRead>> Handle(ListNotes command, CancellationToken cancellationToken)
+        public async Task<IEnumerable<NoteRead>> Handle(ListNotes query, CancellationToken cancellationToken)
         {
-            var note = await _noteRepository.ListByCriteria(x => x.AccountId == command.AccountId);
-            return _mapper.Map<IEnumerable<NoteRead>>(note);
+            var notes = await _noteRepository.ListByCriteria(x => x.AccountId == query.AccountId, query.Limit, query.Offset);
+            return _mapper.Map<IEnumerable<NoteRead>>(notes);
         }
     }
 }

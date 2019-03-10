@@ -10,5 +10,11 @@ namespace Handy.Domain.NoteContext.Queries
     {
         [Required]
         public Guid AccountId { get; set; }
+        
+        [Required]
+        public int Limit { get; set; } = 10;
+        
+        [Required]
+        public int Offset { get; set; } = 0;
     }
 }

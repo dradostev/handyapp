@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,16 +24,22 @@ namespace Handy.Domain.ReminderContext.Services
             _mapper = mapper;
         }
         
-        public async Task<IEnumerable<ReminderRead>> Handle(ListReminders command, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ReminderRead>> Handle(ListReminders query, CancellationToken cancellationToken)
         {
-            var remindersList = await _reminderRepository.ListByCriteria(x => x.AccountId == command.AccountId);
+            if (!query.Filter.Contains("active") && !query.Filter.Contains("disabled"))
+                return _mapper.Map<IEnumerable<ReminderRead>>(new List<object>());
+            var remindersList = await _reminderRepository
+                .ListByCriteria(
+                    x => x.AccountId == query.AccountId 
+                         && (x.Enabled == query.Filter.Contains("active") || !x.Enabled == query.Filter.Contains("disabled")),
+                    query.Limit, query.Offset);
             return _mapper.Map<IEnumerable<ReminderRead>>(remindersList);
         }
 
-        public async Task<ReminderRead> Handle(ShowReminder command, CancellationToken cancellationToken)
+        public async Task<ReminderRead> Handle(ShowReminder query, CancellationToken cancellationToken)
         {
             var reminder =
-                await _reminderRepository.GetByCriteria(x => x.Id == command.ReminderId && x.AccountId == command.AccountId);
+                await _reminderRepository.GetByCriteria(x => x.Id == query.ReminderId && x.AccountId == query.AccountId);
             if (reminder == null) throw new NotFoundException("Reminder not found");
             return _mapper.Map<ReminderRead>(reminder);
         }

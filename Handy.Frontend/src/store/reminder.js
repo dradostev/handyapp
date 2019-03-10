@@ -15,9 +15,9 @@ export default {
         }
     },
     actions: {
-        fetchReminders({commit}) {
+        fetchReminders({commit}, {limit, offset, filter}) {
             return ReminderService
-                .getReminders()
+                .getReminders(limit, offset, filter)
                 .then(res => {
                     commit('SET_REMINDERS', res.data);
                 })

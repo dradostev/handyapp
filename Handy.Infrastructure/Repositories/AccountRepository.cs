@@ -29,10 +29,10 @@ namespace Handy.Infrastructure.Repositories
             return await _db.Accounts.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<IEnumerable<Account>> ListByCriteria(Expression<Func<Account, bool>> predicate)
+        public async Task<IEnumerable<Account>> ListByCriteria(Expression<Func<Account, bool>> predicate, int limit = 10, int offset = 0)
         {
             
-            return await _db.Accounts.Where(predicate).ToListAsync();
+            return await _db.Accounts.Where(predicate).Skip(offset).Take(limit).ToListAsync();
         }
 
         public async Task Persist(Account item)

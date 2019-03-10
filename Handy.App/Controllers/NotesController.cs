@@ -4,6 +4,7 @@ using App.Filters;
 using Handy.Bot.Core;
 using Handy.Domain.NoteContext.Commands;
 using Handy.Domain.NoteContext.Queries;
+using Handy.Domain.SharedContext.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,14 @@ namespace Handy.App.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> ListNotes(Guid id)
+        public async Task<IActionResult> ListNotes([FromQuery] PaginationQuery query)
         {
-            var notes = await _bus.Send(new ListNotes {AccountId = GetCurrentUserId()});
+            var notes = await _bus.Send(new ListNotes
+            {
+                AccountId = GetCurrentUserId(),
+                Limit = query.Limit,
+                Offset = query.Offset
+            });
             return Json(notes);
         }
 

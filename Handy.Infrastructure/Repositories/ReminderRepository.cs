@@ -28,9 +28,9 @@ namespace Handy.Infrastructure.Repositories
             return await _db.Reminders.Include(x => x.Account).FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<IEnumerable<Reminder>> ListByCriteria(Expression<Func<Reminder, bool>> predicate)
+        public async Task<IEnumerable<Reminder>> ListByCriteria(Expression<Func<Reminder, bool>> predicate, int limit = 10, int offset = 0)
         {
-            return await _db.Reminders.Include(x => x.Account).Where(predicate).ToListAsync();
+            return await _db.Reminders.Include(x => x.Account).Where(predicate).Skip(offset).Take(limit).ToListAsync();
         }
 
         public async Task Persist(Reminder item)

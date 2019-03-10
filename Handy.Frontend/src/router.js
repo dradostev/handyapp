@@ -7,7 +7,9 @@ import Home from '@/views/Home';
 import Login from '@/views/Login';
 import NotesList from '@/views/notes/NotesList';
 import NoteDetails from '@/views/notes/NoteDetails';
-import RemindersList from '@/views/RemindersList';
+import NoteCreate from '@/views/notes/NoteCreate';
+import NoteEdit from '@/views/notes/NoteEdit';
+import RemindersList from '@/views/reminders/RemindersList';
 
 Vue.use(Router)
 
@@ -45,9 +47,20 @@ const router = new Router({
           component: NotesList,
         },
         {
+          path: '/notes/create',
+          name: 'note-create',
+          component: NoteCreate
+        },
+        {
           path: '/notes/:id',
           name: 'note-details',
           component: NoteDetails,
+          props: true
+        },
+        {
+          path: '/notes/:id/edit',
+          name: 'note-edit',
+          component: NoteEdit,
           props: true
         },
         {
