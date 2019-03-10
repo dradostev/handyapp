@@ -34,7 +34,7 @@ export default {
     methods: {
         logOut() {
             this.signOut();
-            this.$router.go({name: 'login'})
+            this.$router.go({name: 'landing'})
         },
         ...mapActions('account', ['signOut', 'getProfile'])
     }

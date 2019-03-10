@@ -3,7 +3,9 @@
         <b-nav vertical pills>
             <b-nav-item :to="{name: 'home'}" v-b-tooltip.hover.right title="Home Page"><v-icon name="home" scale="2" /></b-nav-item>
             <b-nav-item :to="{name: 'notes-list'}" v-b-tooltip.hover.right title="Notes"><v-icon name="sticky-note" scale="2" /></b-nav-item>
+            <b-nav-item :to="{name: 'note-create'}" v-b-tooltip.hover.right title="New Note"><v-icon name="plus-square" scale="2" /></b-nav-item>
             <b-nav-item :to="{name: 'reminders-list'}" v-b-tooltip.hover.right title="Reminders"><v-icon name="clock" scale="2" /></b-nav-item>
+            <b-nav-item :to="{name: 'reminder-create'}" v-b-tooltip.hover.right title="New Reminder"><v-icon name="plus-circle" scale="2" /></b-nav-item>
             <b-nav-item @click="logOut()" v-b-tooltip.hover.right title="Log Out"><v-icon name="sign-out-alt" scale="2" /></b-nav-item>
         </b-nav>
     </b-col>
@@ -16,7 +18,7 @@ export default {
     methods: {
         logOut() {
             this.signOut();
-            this.$router.go({name: 'login'})
+            this.$router.go({name: 'landing'})
         },
         ...mapActions('account', ['signOut'])
     }

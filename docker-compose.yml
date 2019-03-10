@@ -21,6 +21,16 @@ services:
       POSTGRES_DB: "${DB_NAME}"
     networks: 
       - webapp
+        
+  frontend:
+    image: frontend
+    build:
+      context: ./Handy.Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx.frontend.conf:/etc/nginx/nginx.conf
 
   handyapp:
     image: handyapp
@@ -43,13 +53,6 @@ services:
       JWT_EXPIRATION_TIME: "${JWT_EXPIRATION_TIME}"
     networks:
       - webapp
-    
-  # frontend:
-  #   image: nginx:latest
-  #   ports:
-  #     - "9000:80"
-  #   volumes:
-  #     - ./frontend:/usr/share/nginx/html
 
 volumes:
   db_volume:

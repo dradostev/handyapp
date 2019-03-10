@@ -23,7 +23,7 @@ const authenticated = (to, from, next) => {
     next();
     return;
   }
-  next({name: 'login'});
+  next({name: 'landing'});
 };
 const notAuthenticated = (to, from, next) => {
   if (!store.getters['account/isAuthenticated']) {
@@ -86,18 +86,18 @@ const router = new Router({
         }
       ]
     },
-    {
-      path: '/login',
-      component: LoginLayout,
-      beforeEnter: notAuthenticated,
-      children: [
-        {
-          path: '/login',
-          name: 'login',
-          component: Login
-        }
-      ]
-    },
+    // {
+    //   path: '/login',
+    //   component: LoginLayout,
+    //   beforeEnter: notAuthenticated,
+    //   children: [
+    //     {
+    //       path: '/login',
+    //       name: 'login',
+    //       component: Login
+    //     }
+    //   ]
+    // },
     {
       path: '/landing',
       component: LandingLayout,
