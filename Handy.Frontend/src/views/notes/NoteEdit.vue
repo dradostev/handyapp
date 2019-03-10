@@ -9,8 +9,11 @@
                 <b-form-input
                     type="text"
                     v-model="note.title"
+                    @blur="$v.note.title.$touch()"
+                    :state="$v.note.title.$dirty ? !$v.note.title.$error : null"
                     placeholder="Enter title"
                     required />
+                <b-form-invalid-feedback v-if="!$v.note.title.required">Title is required field!</b-form-invalid-feedback>
             </b-form-group>
 
             <b-form-group
@@ -18,10 +21,13 @@
                 <b-form-textarea
                     type="text"
                     v-model="note.content"
+                    @blur="$v.note.content.$touch()"
+                    :state="$v.note.content.$dirty ? !$v.note.content.$error: null"
                     placeholder="Enter your fucking data"
                     rows="7"
                     max-rows="20"
                     required />
+                <b-form-invalid-feedback v-if="!$v.note.content.required">Content is required field!</b-form-invalid-feedback>
             </b-form-group>
 
             <b-form-group>
@@ -37,11 +43,20 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { validationMixin } from 'vuelidate';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
     props: {
         id: String,
         note: Object
+    },
+    mixins: [validationMixin],
+    validations: {
+        note: {
+            title: {required},
+            content: {required}
+        }
     },
     mounted() {
         this.fetchNote(this.id)

@@ -1,9 +1,11 @@
 import AccountService from '@/services/AccountService';
+import Vue from 'vue'
 
 export default {
     namespaced: true,
     state: {
-        token: localStorage.getItem('token') || ''
+        token: localStorage.getItem('token') || '',
+        currentUser: {}
     },
     mutations: {
         SET_TOKEN(state, token) {
@@ -11,6 +13,12 @@ export default {
         },
         UNSET_TOKEN(state) {
             localStorage.removeItem('token');
+        },
+        SET_CURRENT_USER(state, profile) {
+            state.currentUser = profile;
+        },
+        UNSET_CURRENT_USER(state) {
+            state.currentUser = {};
         }
     },
     actions: {
@@ -20,10 +28,27 @@ export default {
                 .then(res => {
                     commit('SET_TOKEN', res.data.token);
                 })
-                .catch(error => console.error(error.response));
+                .catch(error => Vue.notify({
+                    group: 'messages',
+                    type: 'error',
+                    title: error.response
+                }));
         },
         signOut({commit}) {
             commit('UNSET_TOKEN');
+            commit('UNSET_CURRENT_USER');
+        },
+        getProfile({commit}) {
+            return AccountService
+                .getProfile()
+                .then(res => {
+                    commit('SET_CURRENT_USER', res.data)
+                })
+                .catch(error => Vue.notify({
+                    group: 'messages',
+                    type: 'error',
+                    title: error.response
+                }));
         }
     },
     getters: {

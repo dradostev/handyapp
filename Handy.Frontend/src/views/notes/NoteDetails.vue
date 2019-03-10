@@ -4,11 +4,11 @@
         <b-button-group>
             <b-button :to="{name: 'notes-list'}" variant="dark"><v-icon name="arrow-left" /> Back to list</b-button>
             <b-button :to="{name: 'note-edit', params: {id: note.id, note: note}}" variant="warning"><v-icon name="edit" /> Edit</b-button>
-            <b-button @click="remove()" variant="danger"><v-icon name="trash-alt" /> Delete</b-button>
+            <b-button v-b-modal.confirmRemove variant="danger"><v-icon name="trash-alt" /> Delete</b-button>
         </b-button-group>
         <hr>
         <p>{{ note.content }}</p>
-        
+        <b-modal id="confirmRemove" @ok="remove()">Are you sure you want to delete "{{ note.title || note.id }}"?</b-modal>
     </div>
 </template>
 

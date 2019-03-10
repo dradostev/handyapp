@@ -11,10 +11,12 @@
 
 <script>
 import SidebarNav from '@/components/SidebarNav';
+import Topbar from '@/components/Topbar';
 
 export default {
     components: {
-        SidebarNav
+        SidebarNav,
+        Topbar
     }
 }
 </script>

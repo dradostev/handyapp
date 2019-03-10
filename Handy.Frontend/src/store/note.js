@@ -1,4 +1,5 @@
 import NotesService from '@/services/NotesService';
+import Vue from 'vue'
 
 export default {
     namespaced: true,
@@ -27,7 +28,11 @@ export default {
                 .then(res => {
                     commit('SET_NOTES', res.data);
                 })
-                .catch(error => console.error(error.response));
+                .catch(error => Vue.notify({
+                    group: 'messages',
+                    type: 'error',
+                    title: error.response
+                }));
         },
         fetchNote({commit}, id) {
             return NotesService
@@ -35,7 +40,11 @@ export default {
                 .then(res => {
                     commit('SET_NOTE', res.data);
                 })
-                .catch(error => console.error(error.response));
+                .catch(error => Vue.notify({
+                    group: 'messages',
+                    type: 'error',
+                    title: error.response
+                }));
         },
         createNote({commit}, note) {
             return NotesService
@@ -43,7 +52,11 @@ export default {
                 .then(res => {
                     commit('SET_NOTE', res.data);
                 })
-                .catch(error => console.error(error.response));
+                .catch(error => Vue.notify({
+                    group: 'messages',
+                    type: 'error',
+                    title: error.response
+                }));
         },
         updateNote({commit}, note) {
             return NotesService
@@ -51,7 +64,11 @@ export default {
                 .then(res => {
                     commit('UPDATE_NOTE', res.data);
                 })
-                .catch(error => console.error(error.response));
+                .catch(error => Vue.notify({
+                    group: 'messages',
+                    type: 'error',
+                    title: error.response
+                }));
         },
         deleteNote({commit}, id) {
             return NotesService
@@ -59,7 +76,11 @@ export default {
                 .then(() => {
                     commit('DELETE_NOTE', id);
                 })
-                .catch(error => console.error(error.response));
+                .catch(error => Vue.notify({
+                    group: 'messages',
+                    type: 'error',
+                    title: error.response
+                }));
         }
     }
 }

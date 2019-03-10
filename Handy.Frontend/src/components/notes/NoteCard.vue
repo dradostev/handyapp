@@ -5,7 +5,7 @@
         {{ note.content }}
         </b-card-text>
         <b-button :to="{'name': 'note-details', params:{id: note.id}}" variant="dark" class="pull-right">Details <v-icon name="arrow-right" /></b-button>
-        <em slot="footer" class="small text-muted">Added on {{ note.created }}</em>
+        <em slot="footer" class="small text-muted">Added on {{ note.created | formatDate }}</em>
     </b-card>
 </template>
 

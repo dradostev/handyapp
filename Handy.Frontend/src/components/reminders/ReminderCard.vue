@@ -1,6 +1,6 @@
 <template>
     <b-card img-top>
-        <h4 slot="header">@ {{ reminder.fireOn }}</h4>
+        <h4 slot="header" :class="reminder.enabled ? 'text-success' : 'text-muted'">@ {{ reminder.fireOn | formatDate }}</h4>
         <b-card-text>
         {{ reminder.content }}
         </b-card-text>

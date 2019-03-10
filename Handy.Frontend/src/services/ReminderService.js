@@ -9,5 +9,17 @@ export default {
     },
     postReminder(reminder) {
         return api.post('/reminders', reminder);
+    },
+    deleteReminder(id) {
+        return api.delete(`/reminders/${id}`);
+    },
+    patchReminderContent(reminder) {
+        return api.patch(`/reminders/${reminder.id}/content`, {content: reminder.content});
+    },
+    patchReminderTime(reminder) {
+        return api.patch(`/reminders/${reminder.id}/time`, {fireOn: reminder.fireOn});
+    },
+    patchReminderEnabled(reminder) {
+        return api.patch(`/reminders/${reminder.id}/enabled`, {});
     }
 }

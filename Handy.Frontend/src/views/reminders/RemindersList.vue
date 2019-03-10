@@ -1,6 +1,10 @@
 <template>
     <div>
         <h1 class="display-2 mb-4 text-center">Reminders</h1>
+        <b-card variant="secondary" bg-variant="secondary" text-variant="white" class="mb-4">
+            <p><strong>Reminders</strong> are used to remind user about any stuff he wants. When necessary time triggers, it just sends a notification via Telegram bot.</p>
+            <b-button :to="{name: 'reminder-create'}" variant="warning"><v-icon name="folder-plus" /> Create Reminder</b-button>
+        </b-card>
         <b-card class="mb-4">
             <b-form-group label="Filter Reminders">
                 <b-form-checkbox-group

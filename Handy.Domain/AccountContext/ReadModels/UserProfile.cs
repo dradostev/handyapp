@@ -8,5 +8,6 @@ namespace Handy.Domain.AccountContext.ReadModels
         public string Login { get; private set; }
         public string ScreenName { get; private set; }
         public DateTime Registered { get; private set; }
+        public short TimeZone { get; private set; }
     }
 }

@@ -21,7 +21,7 @@ namespace Handy.Domain.ReminderContext.Entities
             Id = Guid.NewGuid();
             AccountId = accountId;
             Content = content;
-            FireOn = fireOn.ToUniversalTime();
+            FireOn = fireOn;
             Enabled = true;
             Created = DateTime.Now;
         }
@@ -44,7 +44,7 @@ namespace Handy.Domain.ReminderContext.Entities
         {
             if (newTime > DateTime.Now)
             {
-                FireOn = newTime.ToUniversalTime();
+                FireOn = newTime;
                 Modified = DateTime.Now;
             }
             else

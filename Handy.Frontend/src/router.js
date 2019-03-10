@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from './store';
+import NProgress from 'nprogress';
 import DefaultLayout from '@/views/layouts/DefaultLayout';
 import LoginLayout from '@/views/layouts/LoginLayout';
 import Home from '@/views/Home';
@@ -10,6 +11,8 @@ import NoteDetails from '@/views/notes/NoteDetails';
 import NoteCreate from '@/views/notes/NoteCreate';
 import NoteEdit from '@/views/notes/NoteEdit';
 import RemindersList from '@/views/reminders/RemindersList';
+import ReminderDetails from '@/views/reminders/ReminderDetails';
+import ReminderCreate from '@/views/reminders/ReminderCreate';
 
 Vue.use(Router)
 
@@ -67,6 +70,17 @@ const router = new Router({
           path: '/reminders',
           name: 'reminders-list',
           component: RemindersList
+        },
+        {
+          path: '/reminders/create',
+          name: 'reminder-create',
+          component: ReminderCreate
+        },
+        {
+          path: '/reminders/:id',
+          name: 'reminder-details',
+          component: ReminderDetails,
+          props: true
         }
       ]
     },
@@ -84,5 +98,12 @@ const router = new Router({
     }
   ]
 });
+
+router.beforeEach((routeTo, routeFrom, next) => {
+  NProgress.start();
+  next();
+});
+
+router.afterEach(() => NProgress.done());
 
 export default router;
