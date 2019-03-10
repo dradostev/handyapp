@@ -1,10 +1,16 @@
 import api from '@/services/ApiService';
 
 export default {
-    login(email, password) {
-        return api.post('account/login', {login: email, password: password});
+    login(login, password) {
+        return api.post('/account/login', {login, password});
+    },
+    register(account) {
+        return api.post('/account', account);
+    },
+    telegramLogin(account) {
+        return api.post('/account/telegram-login', account);
     },
     getProfile() {
-        return api.get('account');
+        return api.get('/account');
     }
 }

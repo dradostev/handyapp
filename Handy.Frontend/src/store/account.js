@@ -22,9 +22,21 @@ export default {
         }
     },
     actions: {
+        signInViaTelegram({commit}, account) {
+            return AccountService
+                .telegramLogin(account)
+                .then(res => {
+                    commit('SET_TOKEN', res.data.token);
+                })
+                .catch(error =>  Vue.notify({
+                    group: 'messages',
+                    type: 'error',
+                    title: error.response
+                }));
+        },
         signIn({commit}, loginForm) {
             return AccountService
-                .login(loginForm.email, loginForm.password)
+                .login(loginForm.login, loginForm.password)
                 .then(res => {
                     commit('SET_TOKEN', res.data.token);
                 })

@@ -14,7 +14,7 @@ namespace Handy.App.Configuration
         public static string DbConnectionString => "host=localhost;port=5432;database=pisya3;username=postgres;password=123";
         public static string AppUrl => "http://localhost:8443";
         public static string TelegramApiToken => "773495748:AAHiN_08Q8EUtDCBTxiSOtPAt-u7D1uKsIw";
-        public static string TelegramWebhookUrl => "https://feb083f5.ngrok.io/api/webhook";
+        public static string TelegramWebhookUrl => "https://e05cde34.ngrok.io/api/webhook";
         public static string JwtSecurityKey => "UbeJoux01ULXUIfQkv";
         public static int JwtExpirationTime => 336;
     }

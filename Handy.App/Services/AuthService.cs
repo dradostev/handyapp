@@ -25,11 +25,43 @@ namespace Handy.App.Services
 
         public async Task<string> GetToken(LogIn command)
         {
-            var identity = await GetIdentity(command.Login, command.Password);
-            if (identity == null) throw new AccessDeniedException("Incorrect credentials");
-            
+            var account = await _accountRepository.GetByCriteria(x =>
+                x.Login == command.Login && x.Password == PasswordHelper.HashPassword(command.Password));
+            if (account == null) throw new AccessDeniedException("Incorrect credentials");
+            var identity = GetIdentity(account);
+            return new JwtSecurityTokenHandler().WriteToken(JwtSecurityTokenFactory(identity));
+        }
+
+        public async Task<string> GetToken(LogInViaTelegram command)
+        {
+            var account = await _accountRepository.GetByCriteria(x => 
+                x.Login == command.Login && x.BotChatId == command.ChatId);
+            if (account == null)
+            {
+                account = new Account(
+                    command.Login, PasswordHelper.GetRandomString(8), 3, command.ChatId, command.ScreenName
+                );
+                await _accountRepository.Persist(account);
+            }
+            var identity = GetIdentity(account);
+            return new JwtSecurityTokenHandler().WriteToken(JwtSecurityTokenFactory(identity));
+        }
+
+        private ClaimsIdentity GetIdentity(Account account)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, account.Id.ToString())
+            };
+            var claimsIdentity = new ClaimsIdentity(
+                claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            return claimsIdentity;
+        }
+        
+        private static JwtSecurityToken JwtSecurityTokenFactory(ClaimsIdentity identity)
+        {
             var now = DateTime.UtcNow;
-            var jwt = new JwtSecurityToken(
+            return new JwtSecurityToken(
                 issuer: AppConfig.AppUrl,
                 audience: AppConfig.AppUrl,
                 notBefore: now,
@@ -40,23 +72,6 @@ namespace Handy.App.Services
                     SecurityAlgorithms.HmacSha256
                 )
             );
-            return new JwtSecurityTokenHandler().WriteToken(jwt);
-        }
-
-        private async Task<ClaimsIdentity> GetIdentity(string login, string password)
-        {
-            var account = await _accountRepository.GetByCriteria(x =>
-                x.Login == login && x.Password == PasswordHelper.HashPassword(password));
-
-            if (account == null) return null;
-            
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, account.Id.ToString())
-            };
-            var claimsIdentity = new ClaimsIdentity(
-                claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            return claimsIdentity;
         }
     }
 }

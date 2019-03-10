@@ -4,7 +4,7 @@
         <h1 class="text-center" slot="header"><v-icon name="key" scale="2" /> Sign in to application</h1>
         <b-form @submit.prevent="onSubmit">
         <b-form-group label="Email address:">
-            <b-form-input type="email" required placeholder="Enter email" v-model="loginForm.email" />
+            <b-form-input required placeholder="Enter your Telegram login" v-model="loginForm.login" />
         </b-form-group>
 
         <b-form-group label="Password:">
@@ -24,7 +24,7 @@ export default {
     data() {
         return {
             loginForm: {
-                email: null,
+                login: null,
                 password: null
             }
         }

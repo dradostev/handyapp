@@ -6,5 +6,6 @@ namespace Handy.App.Services
     public interface IAuthService
     {
         Task<string> GetToken(LogIn command);
+        Task<string> GetToken(LogInViaTelegram command);
     }
 }

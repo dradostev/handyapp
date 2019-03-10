@@ -44,6 +44,13 @@ namespace Handy.App.Controllers
             var token = await _authService.GetToken(command);
             return Json(new {id = User.Identity.Name, token});
         }
+        
+        [HttpPost("telegram-login")]
+        public async Task<IActionResult> LogInViaTelegram([FromBody] LogInViaTelegram command)
+        {
+            var token = await _authService.GetToken(command);
+            return Json(new {id = User.Identity.Name, token});
+        }
 
         [HttpGet]
         [Authorize]

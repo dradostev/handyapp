@@ -4,8 +4,10 @@ import store from './store';
 import NProgress from 'nprogress';
 import DefaultLayout from '@/views/layouts/DefaultLayout';
 import LoginLayout from '@/views/layouts/LoginLayout';
+import LandingLayout from '@/views/layouts/LandingLayout';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
+import Landing from '@/views/Landing';
 import NotesList from '@/views/notes/NotesList';
 import NoteDetails from '@/views/notes/NoteDetails';
 import NoteCreate from '@/views/notes/NoteCreate';
@@ -93,6 +95,18 @@ const router = new Router({
           path: '/login',
           name: 'login',
           component: Login
+        }
+      ]
+    },
+    {
+      path: '/landing',
+      component: LandingLayout,
+      beforeEnter: notAuthenticated,
+      children: [
+        {
+          path: '/landing',
+          name: 'landing',
+          component: Landing
         }
       ]
     }

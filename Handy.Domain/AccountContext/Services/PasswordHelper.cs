@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -16,6 +17,14 @@ namespace Handy.Domain.AccountContext.Services
             }
 
             return hash;
+        }
+        
+        public static string GetRandomString(int length)
+        {
+            return new string(
+                Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", length)
+                    .Select(s => s[(new Random()).Next(s.Length)]).ToArray()
+                );
         }
     }
 }
