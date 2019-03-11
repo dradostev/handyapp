@@ -23,7 +23,7 @@ services:
       - webapp
         
   frontend:
-    image: frontend
+    image: rubedo/handyapp_frontend:latest
     build:
       context: ./Handy.Frontend
       dockerfile: Dockerfile
@@ -33,7 +33,7 @@ services:
       - ./config/nginx.frontend.conf:/etc/nginx/nginx.conf
 
   handyapp:
-    image: handyapp
+    image: rubedo/handyapp_backend:latest
     env_file:
       - .env
     depends_on:

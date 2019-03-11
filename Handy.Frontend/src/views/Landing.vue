@@ -5,7 +5,7 @@
 
             <vue-telegram-login 
                 mode="callback"
-                telegram-login="TestBydloBot"
+                telegram-login="HandyAppBot"
                 @callback="logInOrRegister" />
                 
             <hr class="my-4" />

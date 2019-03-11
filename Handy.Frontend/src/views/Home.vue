@@ -2,8 +2,9 @@
     <div>
         <h1 class="display-1">Handy.App</h1>
         <b-card variant="secondary" bg-variant="secondary" text-variant="white">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A maiores nulla molestiae, quo placeat quam dicta, voluptate aspernatur eius labore, aliquam distinctio. In odio velit porro corrupti cum temporibus blanditiis!</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A maiores nulla molestiae, quo placeat quam dicta, voluptate aspernatur eius labore, aliquam distinctio. In odio velit porro corrupti cum temporibus blanditiis!</p>
+            <p>Handy.App is a simple task manager combined with Telegram bot.</p>
+            <p>You can add, remove and edit different types of drafts: <strong>Notes</strong> which are simple pieces of text, and <strong>Reminders</strong> which are basically alarms set on definite date and time to trigger.</p>\
+            <p>This application was made for demo purposes only.</p>
         </b-card>
         <section class="homepage-section">
             <h2 class="display-4">Latest Notes</h2>

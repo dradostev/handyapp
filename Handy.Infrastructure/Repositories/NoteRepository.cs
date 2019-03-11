@@ -30,7 +30,12 @@ namespace Handy.Infrastructure.Repositories
 
         public async Task<IEnumerable<Note>> ListByCriteria(Expression<Func<Note, bool>> predicate, int limit = 10, int offset = 0)
         {
-            return await _db.Notes.Where(predicate).Skip(offset).Take(limit).ToListAsync();
+            return await _db.Notes
+                .Where(predicate)
+                .OrderByDescending(x => x.Created)
+                .Skip(offset)
+                .Take(limit)
+                .ToListAsync();
         }
 
         public async Task Persist(Note item)
